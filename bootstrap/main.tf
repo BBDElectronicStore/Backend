@@ -1,6 +1,7 @@
 locals {
   account-id     = ""
-  full-repo-path = ""
+  org-name = "BBDElectronicStore"
+  org-repo-names = ["Backend", "Frontend", "Consumer"]
 }
 
 
@@ -76,7 +77,11 @@ locals {
               "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com"
             },
             "StringLike" : {
-              "token.actions.githubusercontent.com:sub" : "repo:${local.full-repo-path}:*"
+              "token.actions.githubusercontent.com:sub" : [
+                "repo:${local.org-name}/${local.org-repo-names[0]}:*",
+                "repo:${local.org-name}/${local.org-repo-names[1]}:*",
+                "repo:${local.org-name}/${local.org-repo-names[2]}:*"
+                ]
             }
           }
         }
