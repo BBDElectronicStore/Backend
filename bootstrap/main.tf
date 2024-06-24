@@ -57,11 +57,25 @@ resource "aws_iam_role" "githubActions" {
   max_session_duration = 3600
 }
 
+resource "aws_acm_certificate" "electronics-retailer-cert" {
+  for_each = local.domains
+  domain_name       = "${each.value}.projects.bbdgrad.com"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 output "githubActionsRole" {
   value = aws_iam_role.githubActions.arn
 }
 
 locals {
+  domains = {
+    "Backend"   = "api.electronics",
+    "Frontend"  = "electronics",
+  }
   trust_policy = jsonencode(
     {
       "Version" : "2012-10-17",
