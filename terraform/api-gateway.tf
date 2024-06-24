@@ -3,7 +3,7 @@ resource "aws_api_gateway_rest_api" "electronics-retailer-api" {
   body = templatefile("${path.module}/../api/electronics-retailer-openapi-v0-1-1.yaml", {
     region = local.region
     account = local.account-id
-    get-inventory-lambda-arn = # insert lambda arn here
+    get-inventory-lambda-arn = aws_lambda_function.
     create-order-lambda-arn = # insert lambda arn here
     get-order-lambda-arn = # insert lambda arn here
     delete-order-lambda-arn = # insert lambda arn here 
