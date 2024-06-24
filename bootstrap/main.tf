@@ -1,6 +1,6 @@
 locals {
-  account-id     = ""
-  org-name = "BBDElectronicStore"
+  account-id     = "268644478934"
+  org-name       = "BBDElectronicStore"
   org-repo-names = ["Backend", "Frontend", "Consumer"]
 }
 
@@ -58,7 +58,7 @@ resource "aws_iam_role" "githubActions" {
 }
 
 resource "aws_acm_certificate" "electronics-retailer-cert" {
-  for_each = local.domains
+  for_each          = local.domains
   domain_name       = "${each.value}.projects.bbdgrad.com"
   validation_method = "DNS"
 
@@ -73,8 +73,8 @@ output "githubActionsRole" {
 
 locals {
   domains = {
-    "Backend"   = "api.electronics",
-    "Frontend"  = "electronics",
+    "Backend"  = "api.electronics",
+    "Frontend" = "electronics",
   }
   trust_policy = jsonencode(
     {
@@ -95,7 +95,7 @@ locals {
                 "repo:${local.org-name}/${local.org-repo-names[0]}:*",
                 "repo:${local.org-name}/${local.org-repo-names[1]}:*",
                 "repo:${local.org-name}/${local.org-repo-names[2]}:*"
-                ]
+              ]
             }
           }
         }
