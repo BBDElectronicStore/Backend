@@ -18,6 +18,11 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@main
+      
+      - name: "Bundle Lambda"
+        run: |
+          npm install
+          npm run deploy
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@main

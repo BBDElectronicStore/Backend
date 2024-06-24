@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket         = "-state" #Insert account ID here
+    bucket         = "268644478934-state"
     key            = "backend/terraform.tfstate"
     region         = "eu-west-1"
-    dynamodb_table = "-state" #Insert account ID here
+    dynamodb_table = "268644478934-state"
   }
 }

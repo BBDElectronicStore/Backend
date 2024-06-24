@@ -3,13 +3,13 @@ resource "aws_api_gateway_rest_api" "electronics-retailer-api" {
   body = templatefile("${path.module}/../api/electronics-retailer-openapi-v0-1-1.yaml", {
     region = local.region
     account = local.account-id
-    get-inventory-lambda-arn = aws_lambda_function.
-    create-order-lambda-arn = # insert lambda arn here
-    get-order-lambda-arn = # insert lambda arn here
-    delete-order-lambda-arn = # insert lambda arn here 
-    create-customer-lambda-arn = # insert lambda arn here
-    get-customer-lambda-arn = # insert lambda arn here
-    update-customer-lambda-arn = # insert lambda arn here
+    get-inventory-lambda-arn = aws_lambda_function["get-inventory-lambda"].arn
+    create-order-lambda-arn = aws_lambda_function["create-order-lambda"].arn
+    get-order-lambda-arn = aws_lambda_function["get-order-lambda"].arn
+    delete-order-lambda-arn = aws_lambda_function["delete-order-lambda"].arn
+    create-customer-lambda-arn = aws_lambda_function["create-customer-lambda"].arn
+    get-customer-lambda-arn = aws_lambda_function["get-customer-lambda"].arn
+    update-customer-lambda-arn = aws_lambda_function["update-customer-lambda"].arn
   })
 }
 
