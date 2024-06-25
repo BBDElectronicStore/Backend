@@ -1,16 +1,17 @@
 resource "aws_api_gateway_rest_api" "electronics-retailer-api" {
   name = "electronics-retailer-api"
   body = templatefile("${path.module}/../api/electronics-retailer-openapi-v0-1-1.yaml", {
-    region = local.region
-    account = local.account-id
-    get-inventory-lambda-arn = aws_lambda_function["get-inventory-lambda"].arn
-    create-order-lambda-arn = aws_lambda_function["create-order-lambda"].arn
-    get-order-lambda-arn = aws_lambda_function["get-order-lambda"].arn
-    delete-order-lambda-arn = aws_lambda_function["delete-order-lambda"].arn
-    create-customer-lambda-arn = aws_lambda_function["create-customer-lambda"].arn
-    get-customer-lambda-arn = aws_lambda_function["get-customer-lambda"].arn
-    update-customer-lambda-arn = aws_lambda_function["update-customer-lambda"].arn
+    region : local.region
+    account : local.account-id
+    get-inventory-lambda-arn : aws_lambda_function.lambda["get-inventory-lambda"].arn
+    create-order-lambda-arn : aws_lambda_function.lambda["create-order-lambda"].arn
+    get-order-lambda-arn : aws_lambda_function.lambda["get-order-lambda"].arn
+    delete-order-lambda-arn : aws_lambda_function.lambda["delete-order-lambda"].arn
+    create-customer-lambda-arn : aws_lambda_function.lambda["create-customer-lambda"].arn
+    get-customer-lambda-arn : aws_lambda_function.lambda["get-customer-lambda"].arn
+    update-customer-lambda-arn : aws_lambda_function.lambda["update-customer-lambda"].arn
   })
+  depends_on = [ aws_lambda_function.lambda ]
 }
 
 

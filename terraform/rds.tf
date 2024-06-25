@@ -27,13 +27,13 @@ module "rds" {
   master_user_password_rotation_automatically_after_days = 30
 
   create_db_parameter_group = false
-  parameter_group_name      = "${locals.db-name}-postgres-pg"
+  parameter_group_name      = "${local.db-name}-postgres-pg"
 
   depends_on = [aws_db_parameter_group.electronicsretailer_pg_parameter_group]
 }
 
 resource "aws_db_parameter_group" "electronicsretailer_pg_parameter_group" {
-  name   = "${locals.db-name}-postgres-pg"
+  name   = "${local.db-name}-postgres-pg"
   family = "postgres16"
 
   parameter {

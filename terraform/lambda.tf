@@ -1,71 +1,81 @@
 locals {
-  dist_dir = "${path.module}/../dist"
+  dist_dir = "../dist"
   lambda_list = {
     "create-customer-lambda" = {
-      name    = "create-order-lambda",
       handler = "create_customer_lambda.handler",
     },
     "create-order-lambda" = {
-      name    = "create-order-lambda",
       handler = "create_order_lambda.handler",
     },
     "delete-order-lambda" = {
-      name    = "delete-order-lambda",
       handler = "delete_order_lambda.handler",
     },
     "get-customer-lambda" = {
-      name    = "get-customer-lambda",
       handler = "get_customer_lambda.handler",
     },
     "get-inventory-lambda" = {
-      name    = "get-inventory-lambda",
       handler = "get_inventory_lambda.handler",
     },
     "get-order-lambda" = {
-      name    = "get-order-lambda",
       handler = "get_order_lambda.handler",
     },
     "update-customer-lambda" = {
-      name    = "update-customer-lambda",
       handler = "update_customer_lambda.handler",
     },
   }
 }
 
-data "archive_file" "lambda" {
-  type        = "zip"
-  source_file = local.dist_dir
-  output_path = "ts_lambda_bundle.zip"
-}
-
-
-
-resource "aws_lambda_function" "test_lambda" {
+resource "aws_lambda_function" "lambda" {
   for_each      = local.lambda_list
-  function_name = each.value.name
+  function_name = each.key
 
+  vpc_config {
+    subnet_ids         = module.vpc.public_subnets
+    security_group_ids = [module.vpc.default_security_group_id]
+  }
   memory_size = 256
-  filename    = "${locals.dist_dir}/ts_lambda_bundle.zip"
-  handler     = each.value.handler
-
-
+  filename    = "ts_lambda_bundle.zip"
+  handler     = "handlers/${each.value.handler}"
 
   role             = aws_iam_role.terraform_function_role.arn
   source_code_hash = data.archive_file.lambda.output_base64sha256
   runtime          = "nodejs18.x"
+}
 
-  environment {
-    variables = each.value.environment.variables
-  }
+data "archive_file" "lambda" {
+  type        = "zip"
+  source_dir = local.dist_dir
+  output_path = "ts_lambda_bundle.zip"
+}
+
+resource "aws_lambda_permission" "apigw" {
+  for_each = local.lambda_list
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda[each.key].function_name
+  principal     = "apigateway.amazonaws.com"
+
+  #--------------------------------------------------------------------------------
+  # Per deployment
+  #--------------------------------------------------------------------------------
+  # The /*/*  grants access from any method on any resource within the deployment.
+  # source_arn = "${aws_api_gateway_deployment.test.execution_arn}/*/*"
+
+  #--------------------------------------------------------------------------------
+  # Per API
+  #--------------------------------------------------------------------------------
+  # The /*/*/* part allows invocation from any stage, method and resource path
+  # within API Gateway REST API.
+  source_arn    = "${aws_api_gateway_rest_api.electronics-retailer-api.execution_arn}/*/*"
 }
 
 resource "aws_iam_policy" "lambda-sqs-policy" {
   name = "policy"
 
   policy = templatefile("${path.module}/policies/lambda-policy.json", {
-    REGION     = local.region,
-    ACCOUNT    = local.account-id,
-    QUEUE_NAME = aws_sqs_queue.electronics-retailer-queue.name,
+    region     = local.region,
+    account    = local.account-id,
+    queue_name = aws_sqs_queue.electronics_retailer_queue.name,
   })
 }
 

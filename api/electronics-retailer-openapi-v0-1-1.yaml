@@ -45,7 +45,7 @@ paths:
       security:
         - api_key: []
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${region}:${account}:function:${get-inventory-lambda-arn}/invocations
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-inventory-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -74,7 +74,7 @@ paths:
         '422':
           description: Validation Exception
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${region}:${account}:function:${create-order-lambda-arn}/invocations
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${create-order-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -103,7 +103,7 @@ paths:
         '404': # Also used for when a user isn't authorised to do this
           description: Order not found
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${region}:${account}:function:${get-order-lambda-arn}/invocations
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-order-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -127,7 +127,7 @@ paths:
         '404': # Also used for when a user isn't authorised to do this
           description: Order not found
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${region}:${account}:function:${delete-order-lambda-arn}/invocations
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${delete-order-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -148,7 +148,7 @@ paths:
         '400':
           description: The client performed an incorrect action (either the wrong banking details or already has an account)
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${region}:${account}:function:${create-customer-lambda-arn}/invocations
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${create-customer-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -166,7 +166,7 @@ paths:
         '401':
           description: This endpoint is only available to the Admin portal and not the other services
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${region}:${account}:function:${get-customer-lambda-arn}/invocations
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-customer-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -188,14 +188,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Customer/properties/banking-details'
+              $ref: '#/components/schemas/BankingDetails'
       responses:
         '200':
           description: Details updated
         '400':
           description: The client performed an incorrect action (probably invalid banking details)
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${region}:${account}:function:${update-customer-lambda-arn}/invocations
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${update-customer-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -261,10 +261,12 @@ components:
           type: string
           example: Bob
         banking-details:
-          type: string
-          example: fgh239nzx82y3b
+          $ref: '#/components/schemas/BankingDetails'
       xml:
         name: customer
+    BankingDetails:
+      type: string
+      example: fgh239nzx82y3b
   securitySchemes: # TODO Security - to be determined
     petstore_auth:
       type: oauth2

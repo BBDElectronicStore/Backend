@@ -2,6 +2,18 @@
     "Version": "2012-10-17",
     "Statement": [
         {
+            "Sid": "AllowEC2NetworkAccess",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:AttachNetworkInterface",
+                "ec2:CreateNetworkInterface",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeInstances",
+                "ec2:DescribeNetworkInterfaces"
+            ],
+            "Resource": "*"
+        },
+        {
             "Sid": "AllowSQSAccess",
             "Effect": "Allow",
             "Action": [
@@ -9,7 +21,7 @@
                 "sqs:ReceiveMessage",
                 "sqs:DeleteMessage"
             ],
-            "Resource": "arn:aws:sqs:REGION:ACCOUNT_ID:QUEUE_NAME"
+            "Resource": "arn:aws:sqs:${region}:${account}:${queue_name}"
         }
     ]
 }
