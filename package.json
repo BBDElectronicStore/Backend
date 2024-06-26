@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "deploy": "tsc && cp package.json dist/ && cp package-lock.json dist/ && cp -r node_modules dist"
   },
   "keywords": [],
   "author": "",
@@ -12,11 +13,13 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.140",
     "@types/pg": "^8.11.6",
+    "@types/node": "^20.14.8",
     "serverless": "^4.1.5",
     "typescript": "^5.5.2"
   },
   "dependencies": {
     "aws-lambda": "^1.0.7",
-    "pg": "^8.12.0"
+    "pg": "^8.12.0",
+    "aws-sdk": "^2.1646.0"
   }
 }
