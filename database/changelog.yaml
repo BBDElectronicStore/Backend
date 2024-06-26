@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include:
+      file: ./database/testCreate.sql
