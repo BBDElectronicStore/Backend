@@ -6,8 +6,10 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
+*.js
+.terraform
 
-# Diagnostic reports (https://nodejs.org/api/report.html)
+terraform.tfstate
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Runtime data
