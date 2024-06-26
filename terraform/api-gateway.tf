@@ -11,7 +11,7 @@ resource "aws_api_gateway_rest_api" "electronics-retailer-api" {
     get-customer-lambda-arn : aws_lambda_function.lambda["get-customer-lambda"].arn
     update-customer-lambda-arn : aws_lambda_function.lambda["update-customer-lambda"].arn
   })
-  depends_on = [ aws_lambda_function.lambda ]
+  depends_on = [aws_lambda_function.lambda]
 }
 
 

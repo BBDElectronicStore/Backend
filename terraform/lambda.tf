@@ -44,12 +44,12 @@ resource "aws_lambda_function" "lambda" {
 
 data "archive_file" "lambda" {
   type        = "zip"
-  source_dir = local.dist_dir
+  source_dir  = local.dist_dir
   output_path = "ts_lambda_bundle.zip"
 }
 
 resource "aws_lambda_permission" "apigw" {
-  for_each = local.lambda_list
+  for_each      = local.lambda_list
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda[each.key].function_name
