@@ -12,14 +12,15 @@
   "license": "ISC",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.140",
-    "@types/pg": "^8.11.6",
     "@types/node": "^20.14.8",
+    "@types/pg": "^8.11.6",
     "serverless": "^4.1.5",
     "typescript": "^5.5.2"
   },
   "dependencies": {
+    "@aws-sdk/client-sqs": "^3.600.0",
     "aws-lambda": "^1.0.7",
-    "pg": "^8.12.0",
-    "aws-sdk": "^2.1646.0"
+    "aws-sdk": "^2.1646.0",
+    "pg": "^8.12.0"
   }
 }
