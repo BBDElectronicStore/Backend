@@ -54,19 +54,7 @@ resource "aws_lambda_permission" "apigw" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda[each.key].function_name
   principal     = "apigateway.amazonaws.com"
-
-  #--------------------------------------------------------------------------------
-  # Per deployment
-  #--------------------------------------------------------------------------------
-  # The /*/*  grants access from any method on any resource within the deployment.
-  # source_arn = "${aws_api_gateway_deployment.test.execution_arn}/*/*"
-
-  #--------------------------------------------------------------------------------
-  # Per API
-  #--------------------------------------------------------------------------------
-  # The /*/*/* part allows invocation from any stage, method and resource path
-  # within API Gateway REST API.
-  source_arn    = "${aws_api_gateway_rest_api.electronics-retailer-api.execution_arn}/*/*"
+  source_arn    = "${aws_api_gateway_rest_api.electronics-retailer-api.execution_arn}/*/*" // FYI /*/*/* = PER API, /*/* = PER STAGE
 }
 
 resource "aws_iam_policy" "lambda-sqs-policy" {
