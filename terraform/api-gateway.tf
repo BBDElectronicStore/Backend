@@ -3,7 +3,7 @@ resource "aws_api_gateway_rest_api" "electronics-retailer-api" {
   body = templatefile("${path.module}/../api/electronics-retailer-openapi-v0-1-1.yaml", {
     region : local.region
     account : local.account-id
-    get-item-price-lambda-arn : aws_lambda_function.lambda["get-item-price-lambda-arn"].arn
+    get-item-price-lambda-arn : aws_lambda_function.lambda["get-item-price-lambda"].arn
     create-order-lambda-arn : aws_lambda_function.lambda["create-order-lambda"].arn
     get-order-lambda-arn : aws_lambda_function.lambda["get-order-lambda"].arn
     delete-order-lambda-arn : aws_lambda_function.lambda["delete-order-lambda"].arn
