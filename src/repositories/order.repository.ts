@@ -1,6 +1,5 @@
-import {IRepository} from "../consumer_src/repositories/IRepository";
+import {IRepository} from "./IRepository";
 import {DBPool} from "../database/database.pool";
-import {Logger} from "../consumer_src/lib/logger";
 
 
 export class OrderRepository implements IRepository {
@@ -23,7 +22,6 @@ export class OrderRepository implements IRepository {
               RETURNING order_id
             `, [customerId, quantity, totalCost, correlationId]);
             const orderId = insertOrderResult.rows[0].order_id;
-            Logger.debug(`[${correlationId}]Order inserted with ID: ${orderId}`);
             await DBPool.query('COMMIT');
             return totalCost;
         }
@@ -41,8 +39,7 @@ export class OrderRepository implements IRepository {
               UPDATE orders
               SET status_id = (SELECT status_id FROM status WHERE status_name = $1)
               WHERE reference_number = $2
-            `, [status, correlationId]);
-            Logger.debug(`[${correlationId}]Order status updated to ${status}`);
+            `, [status, correlationId]);-
             await DBPool.query('COMMIT');
             return updateOrderResult.rowCount;
         }
@@ -114,7 +111,6 @@ export class OrderRepository implements IRepository {
             if (orderResult.rows.length === 0) {
                 throw new Error('Failed to insert new order.');
             }
-            
             const orderId = orderResult.rows[0].order_id;
             await DBPool.query('COMMIT');
             return { order_id: orderId, total_cost: totalCost };

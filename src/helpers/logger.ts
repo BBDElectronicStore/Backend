@@ -1,4 +1,4 @@
-import {Colours} from "./enums/Colours.enum";
+import {Colours} from "./Colours.enum";
 
 export const Logger = {
     debug: (message: string) => {
