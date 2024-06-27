@@ -3,6 +3,8 @@ import {DBPool} from "../database/database.pool";
 import {ZeusService} from "../services/zeus.service";
 import {UpdatePriceCommand} from "../commands/updatePrice.command";
 import {ProductRepository} from "./product.repository";
+import {QueryResult} from "pg";
+import {Order} from "../interfaces/order";
 
 export class OrderRepository implements IRepository {
 
@@ -110,7 +112,7 @@ export class OrderRepository implements IRepository {
     async getOrdersByPersonaId(personaId: string) {
         try {
 
-            const result = await DBPool.query(`
+            const result: QueryResult<Order> = await DBPool.query(`
             SELECT o.order_id, o.quantity, o.total_cost, s.status_name
             FROM orders o
             JOIN customers c ON o.customer_id = c.customer_id
