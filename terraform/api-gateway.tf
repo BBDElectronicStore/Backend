@@ -18,7 +18,7 @@ resource "aws_api_gateway_rest_api" "electronics-retailer-api" {
 
 resource "aws_api_gateway_deployment" "electronics-retailer-api-deployment" {
   rest_api_id = aws_api_gateway_rest_api.electronics-retailer-api.id
-  
+
 
   triggers = {
     redeployment = sha1(jsonencode(aws_api_gateway_rest_api.electronics-retailer-api.body))
