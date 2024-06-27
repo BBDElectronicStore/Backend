@@ -1,5 +1,7 @@
 import {IRepository} from "./IRepository";
 import {DBPool} from "../database/database.pool";
+import {QueryResult} from "pg";
+import {Customer} from "../interfaces/customer";
 
 
 export class CustomerRepository implements IRepository {
@@ -33,6 +35,19 @@ export class CustomerRepository implements IRepository {
         console.error('Error updating order status:', e);
         throw e;
     }
-  
+
+  }
+
+  public async getAllCustomers() {
+    try {
+      const res: QueryResult<Customer> = await DBPool.query(`
+        SELECT *
+        FROM "customers"
+      `);
+      return res.rows;
+    } catch (e) {
+      console.log('Error getting customers: ',e);
+      throw e;
+    }
   }
 }
