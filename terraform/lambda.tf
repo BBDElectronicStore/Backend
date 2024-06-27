@@ -1,6 +1,9 @@
 locals {
   dist_dir = "../dist"
   lambda_list = {
+    "get-item-price-lambda" = {
+      handler = "get_item_price_lambda.handler",
+    },
     "create-customer-lambda" = {
       handler = "create_customer_lambda.handler",
     },
@@ -13,11 +16,12 @@ locals {
     "get-customer-lambda" = {
       handler = "get_customer_lambda.handler",
     },
-    "get-inventory-lambda" = {
-      handler = "get_inventory_lambda.handler",
-    },
+
     "get-order-lambda" = {
       handler = "get_order_lambda.handler",
+    },
+    "get-customer-orders-lambda" = {
+      handler = "get_customer_orders_lambda.handler",
     },
     "update-customer-lambda" = {
       handler = "update_customer_lambda.handler",
