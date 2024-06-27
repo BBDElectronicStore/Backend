@@ -1,1 +1,1 @@
-Spec is in **spec.yaml**
+Spec is in **api/electronics-retailer-openapi-v0-1-1.yaml**
