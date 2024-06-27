@@ -5,19 +5,18 @@ import {QueryResult} from "pg";
 
 export class ProductRepository implements IRepository {
 
-    async updateProductPriceAndVAT(newPrice: number, newVAT: number) {
+    async updateProductPriceAndVAT(newPrice: number) {
         try {
             const result = await DBPool.query(`
               UPDATE "products"
-              SET "price" = $1,
-                  "VAT" = $2
+              SET "price" = $1
               WHERE "product_id" = (
                 SELECT "product_id"
                 FROM "products"
                 ORDER BY "product_id"
                 LIMIT 1
               )
-            `, [newPrice, newVAT]);
+            `, [newPrice]);
 
             return result.rowCount;
         } catch (error) {

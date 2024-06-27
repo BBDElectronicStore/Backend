@@ -2,19 +2,19 @@ import {ICommand} from "./ICommand";
 import {ProductRepository} from "../repositories/product.repository";
 
 
-export class UpdatePriceCommand implements ICommand<Promise<number | null>, [newPrice: number, newVAT: number]> {
+export class UpdatePriceCommand implements ICommand<Promise<number | null>, [newPrice: number]> {
 
     constructor(private readonly repository: ProductRepository) {}
 
-    async execute(newPrice: number, newVAT: number) {
-        if(this.validate(newPrice, newVAT))
-            return await this.repository.updateProductPriceAndVAT(newPrice, newVAT);
+    async execute(newPrice: number) {
+        if(this.validate(newPrice))
+            return await this.repository.updateProductPriceAndVAT(newPrice);
         return null;
     }
 
-    validate(newPrice: number, newVAT: number): boolean {
-        if(!newPrice || !newVAT)
+    validate(newPrice: number): boolean {
+        if(!newPrice)
             return false;
-        return !(newPrice < 0 || newVAT < 0);
+        return !(newPrice < 0);
     }
 }

@@ -1,4 +1,4 @@
 export interface BankDetails {
-    accountNumber: string;
-    sortCode: string;
+    bankId: string;
+    accountId: string;
 }
