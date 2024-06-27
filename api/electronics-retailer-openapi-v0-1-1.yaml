@@ -160,11 +160,13 @@ paths:
         type: aws_proxy
   /customer/{customerId}:
     parameters:
-      - name: customerId
+      - name: customerRef
         in: path
+        description: ID of the customer to update
         required: true
         schema:
-          type: string
+          type: integer
+          format: int64
     get:
       tags:
         - customer
@@ -188,14 +190,6 @@ paths:
       tags:
         - customer
       summary: update the banking details of a customer using their ID
-      parameters:
-        - name: customerRef
-          in: path
-          description: ID of the customer to update
-          required: true
-          schema:
-            type: integer
-            format: int64
       requestBody:
         description: Customer new banking details
         content:
