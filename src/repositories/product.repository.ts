@@ -1,5 +1,6 @@
 import {IRepository} from "./IRepository";
 import {DBPool} from "../database/database.pool";
+import {QueryResult} from "pg";
 
 
 export class ProductRepository implements IRepository {
@@ -21,6 +22,21 @@ export class ProductRepository implements IRepository {
             return result.rowCount;
         } catch (error) {
             return -1;
+        }
+    }
+
+    async getProductPriceAndVAT() {
+        try {
+            const result: QueryResult<any> = await DBPool.query(`
+              SELECT "price", "VAT"
+              FROM "products"
+              ORDER BY "product_id"
+              LIMIT 1
+            `);
+
+            return result.rows[0];
+        } catch (error) {
+            return null;
         }
     }
 }

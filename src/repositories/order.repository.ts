@@ -103,7 +103,7 @@ export class OrderRepository implements IRepository {
             const price = productResult.rows[0].price;
             const VAT = productResult.rows[0].VAT;
 
-            const totalCost = price * quantity * (1 + VAT / 100); // Calculate total cost including VAT
+            const totalCost = Math.round(price * quantity * (1 + VAT / 100));
 
             const orderResult = await DBPool.query(`
                 INSERT INTO "orders" ("customer_id", "quantity", "status_id", "total_cost")
