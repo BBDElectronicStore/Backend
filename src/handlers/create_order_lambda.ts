@@ -1,11 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import {Logger} from "../consumer_src/lib/logger";
 import {PlaceOrderCommand} from "../commands/placeOrder.command";
 import {OrderRepository} from "../repositories/order.repository";
-import {sendMessage} from "../consumer_src/util/sendMessage";
-import {payment} from "../consumer_src/interfaces/messages/payment";
-import {PaymentMessage} from "../consumer_src/messages/payment.message";
-import {ElectronicsStoreDefaultConfig} from "../consumer_src/config/electronics";
 import {BankService} from "../services/bank.service";
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
