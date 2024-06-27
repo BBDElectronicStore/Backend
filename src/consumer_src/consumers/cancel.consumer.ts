@@ -2,7 +2,7 @@ import {Handle} from "../lib/decorators/handle";
 import {IConsume} from "../lib/interfaces/IConsume";
 import {payment} from "../interfaces/messages/payment";
 import {Logger} from "../lib/logger";
-import {OrderRepository} from "../repositories/order.repository";
+import {OrderRepository} from "../../repositories/order.repository";
 import {Cancel} from "../interfaces/messages/cancel";
 import {CancelMessage} from "../messages/cancel.message";
 import {CancelOrderCommand} from "../commands/cancelOrder.command";

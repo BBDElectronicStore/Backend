@@ -1,6 +1,6 @@
-import {IRepository} from "./IRepository";
+import {IRepository} from "../consumer_src/repositories/IRepository";
 import {DBPool} from "../database/database.pool";
-import {Logger} from "../lib/logger";
+import {Logger} from "../consumer_src/lib/logger";
 
 
 export class OrderRepository implements IRepository {
@@ -80,6 +80,48 @@ export class OrderRepository implements IRepository {
         catch (e) {
             console.error('Error getting order status:', e);
             throw e;
+        }
+    }
+
+    async placeOrderAndGetTotalCost(quantity: number, customerId: number): Promise<{ order_id: number, total_cost: number } | null> {
+        try {
+            await DBPool.query('BEGIN');
+
+            const fetchProductQuery = `
+                SELECT "price", "VAT"
+                FROM "products"
+                ORDER BY "product_id"
+                LIMIT 1
+            `;
+
+            const productResult = await DBPool.query(fetchProductQuery);
+
+            if (productResult.rows.length === 0) {
+                throw new Error("No products found");
+            }
+
+            const price = productResult.rows[0].price;
+            const VAT = productResult.rows[0].VAT;
+
+            const totalCost = price * quantity * (1 + VAT / 100); // Calculate total cost including VAT
+
+            const orderResult = await DBPool.query(`
+                INSERT INTO "orders" ("customer_id", "quantity", "status_id", "total_cost")
+                VALUES ($1, $2, (SELECT "status_id" FROM "status" WHERE "status_name" = 'pending'), $3)
+                RETURNING "order_id"
+            `, [customerId, quantity, totalCost]);
+
+            if (orderResult.rows.length === 0) {
+                throw new Error('Failed to insert new order.');
+            }
+            
+            const orderId = orderResult.rows[0].order_id;
+            await DBPool.query('COMMIT');
+            return { order_id: orderId, total_cost: totalCost };
+        } catch (error) {
+            await DBPool.query('ROLLBACK');
+            console.error('Error placing order:', error);
+            return null;
         }
     }
 }

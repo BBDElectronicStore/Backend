@@ -1,5 +1,5 @@
 import {ICommand} from "./ICommand";
-import {OrderRepository} from "../repositories/order.repository";
+import {OrderRepository} from "../../repositories/order.repository";
 import {Logger} from "../lib/logger";
 
 
