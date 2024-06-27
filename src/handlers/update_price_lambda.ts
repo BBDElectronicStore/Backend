@@ -15,7 +15,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             statusCode: 400,
             body: JSON.stringify({ message: 'Bad Request' }),
         };
-    const result = await command.execute(data.newPrice, data.newVAT);
+    const result = await command.execute(data.newPrice);
     if(result === null)
         return {
             statusCode: 400,
