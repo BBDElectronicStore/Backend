@@ -5,6 +5,7 @@ import {UpdatePriceCommand} from "../commands/updatePrice.command";
 import {ProductRepository} from "./product.repository";
 import {QueryResult} from "pg";
 import {Order} from "../interfaces/order";
+import {AllOrders} from "../interfaces/allOrders";
 
 export class OrderRepository implements IRepository {
 
@@ -125,6 +126,33 @@ export class OrderRepository implements IRepository {
         }
         catch(e) {
             console.error('Error getting orders by persona id:', e);
+            throw e;
+        }
+    }
+
+    async getAllOrders() {
+        try {
+            const result: QueryResult<AllOrders> = await DBPool.query(`
+                SELECT
+                    o.order_id,
+                    c.persona_id,
+                    o.quantity,
+                    o.total_cost,
+                    s.status_name
+                FROM
+                    orders o
+                        JOIN
+                    customers c ON o.customer_id = c.customer_id
+                        JOIN
+                    status s ON o.status_id = s.status_id
+                ORDER BY
+                    o.order_id;
+            `);
+
+            return result.rows
+        }
+        catch(e) {
+            console.error('Error getting orders:', e);
             throw e;
         }
     }
