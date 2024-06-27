@@ -106,4 +106,24 @@ export class OrderRepository implements IRepository {
             return null;
         }
     }
+
+    async getOrdersByPersonaId(personaId: string) {
+        try {
+
+            const result = await DBPool.query(`
+            SELECT o.order_id, o.quantity, o.total_cost, s.status_name
+            FROM orders o
+            JOIN customers c ON o.customer_id = c.customer_id
+            JOIN status s ON o.status_id = s.status_id
+            WHERE c.persona_id = $1
+            ORDER BY o.order_id;
+            `, [personaId]);
+
+            return result.rows
+        }
+        catch(e) {
+            console.error('Error getting orders by persona id:', e);
+            throw e;
+        }
+    }
 }

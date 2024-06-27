@@ -44,7 +44,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         }
     }
     const command = new UpdateStatusCommand(new OrderRepository());
-    // await command.execute(String(result.order_id), 'collected');
+    await command.execute(String(result.order_id), 'collected');
     return {
       statusCode: 200,
       body: JSON.stringify({
