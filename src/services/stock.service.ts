@@ -1,4 +1,5 @@
 export class StockService {
+    url = 'https://api.mese.projects.bbdgrad.com';
 
     async getStocks() {
         return [
@@ -13,6 +14,23 @@ export class StockService {
                 totalListedStock: 10000
             }
         ]
+    }
+
+    async makePurchase(buyerId: string, businessId: string, stockAmount: number) {
+        try {
+            const response = await fetch(`${this.url}/stocks/buy`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+           // TODO How to add a body to this
+        }
+        catch (e) {
+            console.log(e);
+            return false;
+        }
     }
 
 }
