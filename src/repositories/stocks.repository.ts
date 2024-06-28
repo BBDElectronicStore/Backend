@@ -1,6 +1,7 @@
 import {IRepository} from "./IRepository";
 import {DBPool} from "../database/database.pool";
 import {Stock} from "../interfaces/stock";
+import {QueryResult} from "pg";
 
 
 export class StocksRepository implements IRepository {
@@ -24,12 +25,13 @@ export class StocksRepository implements IRepository {
 
     async getStocks(): Promise<Stock[]> {
         try {
-            const result = await DBPool.query(`
+            const result= await DBPool.query(`
               SELECT stock_data
               FROM stocks
               WHERE stock_id = 1
             `);
-            return JSON.parse(result.rows[0].stock_data);
+            const data =  result.rows[0].stock_data;
+            return data;
         } catch (error) {
             return [];
         }
