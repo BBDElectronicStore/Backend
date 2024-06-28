@@ -25,7 +25,7 @@ export async function main() {
     // Buy stocks that went down the most in value
     await buy(budget);
     // Sell stocks that went up the most in price
-    await sell();
+    await sell(oldStock, stocks);
     // get most recent val from table
     // get new val
     // update most recent val in table
