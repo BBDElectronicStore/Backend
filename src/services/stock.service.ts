@@ -1,7 +1,9 @@
+import {Stock} from "../interfaces/stock";
+
 export class StockService {
     url = 'https://api.mese.projects.bbdgrad.com';
 
-    async getStocks() {
+    async getStocks(): Promise<Stock[]> {
         return [
             {
                 businessId: 1,
