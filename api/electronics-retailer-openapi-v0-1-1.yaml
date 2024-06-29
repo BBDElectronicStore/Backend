@@ -31,7 +31,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/Price'
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-item-price-lambda-arn}/invocations
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-price-lambda-arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+    put:
+      tags:
+        - store
+      summary: Update the cost of items
+      requestBody:
+        description: Updated price object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Price'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+        '400':
+          description: Invalid input
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${update-price-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -154,7 +178,7 @@ paths:
         '401':
           description: This endpoint is only available to the Admin portal and not the other services
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-customer-lambda-arn}/invocations
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-all-customers-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -181,7 +205,7 @@ paths:
         '401':
           description: This endpoint is only available to the Admin portal and not the other services
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-customer-orders-lambda-arn}/invocations
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-all-orders-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
