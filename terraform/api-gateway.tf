@@ -8,7 +8,7 @@ resource "aws_api_gateway_rest_api" "electronics-retailer-api" {
     get-order-lambda-arn : aws_lambda_function.lambda["get-order-lambda"].arn
     delete-order-lambda-arn : aws_lambda_function.lambda["delete-order-lambda"].arn
     create-customer-lambda-arn : aws_lambda_function.lambda["create-customer-lambda"].arn
-    get-all-customers-lambda-arn: aws_lambda_function.lambda["get-all-customers-lambda"].arn
+    get-all-customers-lambda-arn : aws_lambda_function.lambda["get-all-customers-lambda"].arn
     get-all-orders-lambda-arn : aws_lambda_function.lambda["get-all-orders-lambda"].arn
     update-customer-lambda-arn : aws_lambda_function.lambda["update-customer-lambda"].arn
     update-price-lambda-arn : aws_lambda_function.lambda["update-price-lambda"].arn
@@ -45,7 +45,7 @@ resource "aws_api_gateway_domain_name" "electronics-retailer-api-gw-domain-name"
   domain_name = "api.electronics.projects.bbdgrad.com"
 
   regional_certificate_arn = data.aws_acm_certificate.issued.arn
-  security_policy = "TLS_1_2"
+  security_policy          = "TLS_1_2"
   mutual_tls_authentication {
     truststore_uri = "s3://miniconomy-trust-store-bucket/truststore.pem"
   }

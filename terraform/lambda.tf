@@ -67,7 +67,7 @@ resource "aws_lambda_permission" "apigw" {
   function_name = aws_lambda_function.lambda[each.key].function_name
   principal     = "apigateway.amazonaws.com"
   # source_arn    = "${aws_apigatewayv2_api.electronics-retailer-api.execution_arn}/*/*" // FYI /*/*/* = PER API, /*/* = PER STAGE
-  source_arn    = "${aws_api_gateway_rest_api.electronics-retailer-api.execution_arn}/*/*" // FYI /*/*/* = PER API, /*/* = PER STAGE
+  source_arn = "${aws_api_gateway_rest_api.electronics-retailer-api.execution_arn}/*/*" // FYI /*/*/* = PER API, /*/* = PER STAGE
 }
 
 resource "aws_iam_policy" "lambda-sqs-policy" {
