@@ -23,7 +23,7 @@ export async function main() {
     const stocks = await new StockService().getStocks();
     console.log(stocks)
     // Buy stocks that went down the most in value
-    await buy(budget);
+    await buy(budget, stocks, oldStock);
     // Sell stocks that went up the most in price
     await sell(oldStock, stocks);
     // get most recent val from table
