@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import {PlaceOrderCommand} from "../commands/placeOrder.command";
 import {OrderRepository} from "../repositories/order.repository";
-import {BankService} from "../services/bank.service";
+import {RetailBankService} from "../services/retail.bank.service";
 import {PlaceOrder} from "../interfaces/placeOrder";
 import {InsuranceService} from "../services/insurance.service";
 import {UpdateStatusCommand} from "../commands/updateStatus.command";
@@ -23,7 +23,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         }
     }
 
-    const bankService = new BankService();
+    const bankService = new RetailBankService();
     const approved = await bankService.processPayment(result.total_cost, String(result.order_id), data.bankDetails);
     // Now await bank and check if payment valid
     if(!approved) {

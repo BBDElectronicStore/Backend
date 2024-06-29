@@ -1,12 +1,13 @@
 import {sell} from "./sell";
 import {buy} from "./buy";
-import {BankService} from "../services/bank.service";
+import {RetailBankService} from "../services/retail.bank.service";
 // import {StockService} from "../services/sotck.service";
 // import {GetStocksQuery} from "../queries/getStocks.query";
 import {StocksRepository} from "../repositories/stocks.repository";
 import {StockService} from "../services/stock.service";
 import {GetStocksQuery} from "../queries/getStock.query";
 import {UpdateStockCommand} from "../commands/updateStock.command";
+import { CommercialBankService } from "../services/commercial.bank.service";
 // import {UpdateStatusCommand} from "../commands/updateStocks.command";
 
 
@@ -16,7 +17,8 @@ export async function main() {
     // allowance per job run
     // try use "all" allowance
     // 40% of current money = allowance for buying stocks
-    const currentBalance = await new BankService().getCurrentBalance();
+
+    const currentBalance = await new CommercialBankService().getCurrentBalance();
     const budget = Math.floor(currentBalance * 0.40);
 
     const oldStock = await new GetStocksQuery(new StocksRepository()).execute()

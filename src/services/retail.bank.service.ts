@@ -1,6 +1,6 @@
 import {BankDetails} from "../interfaces/bankDetails";
 
-export class BankService {
+export class RetailBankService {
     url = 'https://api.retailbank.projects.bbdgrad.com';
 
     async processPayment(totalCost: number, orderRef: string, senderId: string): Promise<boolean> {
@@ -35,8 +35,8 @@ export class BankService {
 
     }
 
-    async getCurrentBalance(): Promise<number> {
-        return 5000;
-    }
+    // async getCurrentBalance(): Promise<number> {
+    //     return 5000;
+    // }
 
 }
