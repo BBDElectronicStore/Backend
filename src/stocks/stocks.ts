@@ -17,7 +17,9 @@ export async function main() {
     // allowance per job run
     // try use "all" allowance
     // 40% of current money = allowance for buying stocks
-    const budget = await new CommercialBankService().getCurrentBalance();
+
+    const currentBalance = await new CommercialBankService().getCurrentBalance();
+    const budget = Math.floor(currentBalance * 0.40);
 
     const oldStock = await new GetStocksQuery(new StocksRepository()).execute()
     console.log(oldStock)
