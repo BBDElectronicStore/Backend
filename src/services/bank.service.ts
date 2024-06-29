@@ -31,6 +31,12 @@ export class BankService {
             console.log(e);
             return false;
         }
+
+
+    }
+
+    async getCurrentBalance(): Promise<number> {
+        return 5000;
     }
 
 }
