@@ -5,30 +5,59 @@ export class StockService {
     url = 'https://api.mese.projects.bbdgrad.com';
 
     async getStocks(): Promise<Stock[]> {
-        return [
-            {
-                businessId: "1",
-                SellPrice: 100,
-                totalListedStock: 10000
-            },
-            {
-                businessId: "2",
-                SellPrice: 50,
-                totalListedStock: 10000
-            }
-        ]
-    }
-
-    async makePurchase(buyerId: string, businessId: string, stockAmount: number) {
         try {
-            const response = await fetch(`${this.url}/stocks/buy`, {
-                method: 'POST',
+            const response = await fetch(`${this.url}/market/listings`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
 
-           // TODO How to add a body to this
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data;
+        }
+        catch (e) {
+            console.log(e);
+            return [];
+        }
+        // return [
+        //     {
+        //         businessId: "1",
+        //         SellPrice: 100,
+        //         totalListedStock: 10000
+        //     },
+        //     {
+        //         businessId: "2",
+        //         SellPrice: 50,
+        //         totalListedStock: 10000
+        //     }
+        // ]
+    }
+
+
+    async makePurchase(buyerId: string, businessId: string, stockAmount: number) {
+        const body = {
+            buyerId,
+            businessId,
+            stockAmount
+          }
+
+        try {
+            const response = await fetch(`${this.url}/stocks/buy`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return true;
         }
         catch (e) {
             console.log(e);
@@ -36,6 +65,7 @@ export class StockService {
         }
     }
 
+    // Idk if we need this function?
     async getMyStocks(userId: string): Promise<MyStock[]> {
         return [
             {
