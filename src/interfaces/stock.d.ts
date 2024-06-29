@@ -1,5 +1,5 @@
 export interface Stock {
-    businessId: number;
+    businessId: string;
     SellPrice: number;
     totalListedStock: number;
 }
