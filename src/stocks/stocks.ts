@@ -1,9 +1,16 @@
-import {sellStocks} from "./sell";
+import {sell} from "./sell";
 import {buy} from "./buy";
 import {BankService} from "../services/bank.service";
+// import {StockService} from "../services/sotck.service";
+// import {GetStocksQuery} from "../queries/getStocks.query";
+import {StocksRepository} from "../repositories/stocks.repository";
+import {StockService} from "../services/stock.service";
+import {GetStocksQuery} from "../queries/getStock.query";
+import {UpdateStockCommand} from "../commands/updateStock.command";
+// import {UpdateStatusCommand} from "../commands/updateStocks.command";
 
 
-async function main() {
+export async function main() {
     // register business and sell x% of shares
 
     // allowance per job run
@@ -11,13 +18,19 @@ async function main() {
     // 40% of current money = allowance for buying stocks
     const budget = await new BankService().getCurrentBalance();
 
+    const oldStock = await new GetStocksQuery(new StocksRepository()).execute()
+    console.log(oldStock)
+    const stocks = await new StockService().getStocks();
+    console.log(stocks)
     // Buy stocks that went down the most in value
-    buy(budget);
+    await buy(budget, stocks, oldStock);
     // Sell stocks that went up the most in price
-    sellStocks();
+    await sell(oldStock, stocks);
     // get most recent val from table
     // get new val
     // update most recent val in table
-}
 
-main().then(() => {console.log("job finished")})
+    // Now we have to update the stocks table with the new values
+    const command = new UpdateStockCommand(new StocksRepository());
+    await command.execute(stocks);
+}
