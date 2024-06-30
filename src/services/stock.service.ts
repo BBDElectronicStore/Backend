@@ -65,7 +65,6 @@ export class StockService {
         }
     }
 
-    // Idk if we need this function?
     async getMyStocks(userId: string): Promise<MyStock[]> {
         return [
             {
