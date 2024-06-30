@@ -12,8 +12,13 @@ resource "aws_api_gateway_rest_api" "electronics-retailer-api" {
     get-all-orders-lambda-arn : aws_lambda_function.lambda["get-all-orders-lambda"].arn
     update-customer-lambda-arn : aws_lambda_function.lambda["update-customer-lambda"].arn
     update-price-lambda-arn : aws_lambda_function.lambda["update-price-lambda"].arn
+    cognito_user_pool_arn : data.aws_cognito_user_pools.selected.arn
   })
   depends_on = [aws_lambda_function.lambda]
+}
+
+data "aws_cognito_user_pools" "selected" {
+  name = "byte-bazaar"
 }
 
 
