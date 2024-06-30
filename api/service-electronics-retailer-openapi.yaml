@@ -30,8 +30,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Price'
-      security:
-        - cognito: []
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-price-lambda-arn}/invocations
         passthroughBehavior: when_no_match
@@ -58,74 +56,12 @@ paths:
           description: Invalid input
         '422':
           description: Validation Exception
-      security:
-        - cognito: []
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${create-order-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
-  /customer:
-    get:
-      tags:
-        - customer
-      summary: Get all customers
-      responses:
-        '200':
-          description: Customer Successfully Created (Plus a list of the customer and their order history)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '401':
-          description: This endpoint is only available to the Admin portal and not the other services
-      security:
-        - cognito: []
-      x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-all-customers-lambda-arn}/invocations
-        passthroughBehavior: when_no_match
-        httpMethod: POST
-        type: aws_proxy
-  /customer/{customerId}:
-    parameters:
-      - name: customerId
-        in: path
-        description: ID of the customer to update
-        required: true
-        schema:
-          type: integer
-          format: int64
-    get:
-      tags:
-        - customer
-      summary: Get all orders for a customer
-      responses:
-        '200':
-          description: Customer Successfully Created (Plus a list of the customer and their order history)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderandCustomer'
-        '401':
-          description: This endpoint is only available to the Admin portal and not the other services
-      security:
-        - cognito: []
-      x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-all-orders-lambda-arn}/invocations
-        passthroughBehavior: when_no_match
-        httpMethod: POST
-        type: aws_proxy
 components:
-  securitySchemes:
-    "cognito":
-      type: "apiKey"
-      name: "Authorization"
-      in: "header"
-      x-amazon-apigateway-authtype: "cognito_user_pools"
-      x-amazon-apigateway-authorizer:
-        providerARNs:
-          - "${cognito_user_pool_arn}"
-        type: "cognito_user_pools"
   schemas:
     OrderRef:
       type: object

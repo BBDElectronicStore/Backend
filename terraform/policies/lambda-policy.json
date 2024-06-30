@@ -21,7 +21,7 @@
                 "sqs:ReceiveMessage",
                 "sqs:DeleteMessage"
             ],
-            "Resource": "arn:aws:sqs:${region}:${account}:${queue_name}"
+            "Resource": "*"
         }
     ]
 }

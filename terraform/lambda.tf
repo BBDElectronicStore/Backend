@@ -1,14 +1,8 @@
 locals {
   dist_dir = "../dist"
   lambda_list = {
-    "create-customer-lambda" = {
-      handler = "create_customer_lambda.handler",
-    },
     "create-order-lambda" = {
       handler = "create_order_lambda.handler",
-    },
-    "delete-order-lambda" = {
-      handler = "delete_order_lambda.handler",
     },
     "get-all-customers-lambda" = {
       handler = "get_all_customers_lambda.handler",
@@ -16,24 +10,13 @@ locals {
     "get-all-orders-lambda" = {
       handler = "get_all_orders_lambda.handler",
     },
-    "get-customer-lambda" = {
-      handler = "get_customer_lambda.handler",
-    },
+
     "get-customer-orders-lambda" = {
       handler = "get_customer_orders_lambda.handler",
     },
-    "get-order-lambda" = {
-      handler = "get_order_lambda.handler",
-    },
     "get-price-lambda" = {
       handler = "get_item_price_lambda.handler",
-    },
-    "update-customer-lambda" = {
-      handler = "update_customer_lambda.handler",
-    },
-    "update-price-lambda" = {
-      handler = "update_price_lambda.handler",
-    },
+    }
   }
 }
 
@@ -60,7 +43,7 @@ data "archive_file" "lambda" {
   output_path = "ts_lambda_bundle.zip"
 }
 
-resource "aws_lambda_permission" "apigw" {
+resource "aws_lambda_permission" "service-apigw" {
   for_each      = local.lambda_list
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
@@ -69,6 +52,15 @@ resource "aws_lambda_permission" "apigw" {
   # source_arn    = "${aws_apigatewayv2_api.electronics-retailer-api.execution_arn}/*/*" // FYI /*/*/* = PER API, /*/* = PER STAGE
   source_arn = "${aws_api_gateway_rest_api.electronics-retailer-api.execution_arn}/*/*" // FYI /*/*/* = PER API, /*/* = PER STAGE
 }
+resource "aws_lambda_permission" "fe-apigw" {
+  for_each      = local.lambda_list
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda[each.key].function_name
+  principal     = "apigateway.amazonaws.com"
+  # source_arn    = "${aws_apigatewayv2_api.electronics-retailer-api.execution_arn}/*/*" // FYI /*/*/* = PER API, /*/* = PER STAGE
+  source_arn = "${aws_api_gateway_rest_api.frontend-electronics-retailer-api.execution_arn}/*/*" // FYI /*/*/* = PER API, /*/* = PER STAGE
+}
 
 resource "aws_iam_policy" "lambda-sqs-policy" {
   name = "policy"
@@ -76,7 +68,6 @@ resource "aws_iam_policy" "lambda-sqs-policy" {
   policy = templatefile("${path.module}/policies/lambda-policy.json", {
     region     = local.region,
     account    = local.account-id,
-    queue_name = aws_sqs_queue.electronics_retailer_queue.name,
   })
 }
 
