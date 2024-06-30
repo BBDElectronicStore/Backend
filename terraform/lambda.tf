@@ -66,8 +66,8 @@ resource "aws_iam_policy" "lambda-sqs-policy" {
   name = "policy"
 
   policy = templatefile("${path.module}/policies/lambda-policy.json", {
-    region     = local.region,
-    account    = local.account-id,
+    region  = local.region,
+    account = local.account-id,
   })
 }
 
