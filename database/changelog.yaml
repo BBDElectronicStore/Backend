@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: ./database/main-script.sql
+  - include:
+      file: ./database/key-value-table.sql

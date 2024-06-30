@@ -30,34 +30,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Price'
+      security:
+        - cognito: []
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-price-lambda-arn}/invocations
-        passthroughBehavior: when_no_match
-        httpMethod: POST
-        type: aws_proxy
-  /store/order:
-    post:
-      tags:
-        - store
-      summary: Create order
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Order'
-      responses:
-        '201':
-          description: Customer Successfully Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderRef'
-        '400':
-          description: Invalid input
-        '422':
-          description: Validation Exception
-      x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${create-order-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
@@ -75,6 +51,8 @@ paths:
                 $ref: '#/components/schemas/Customer'
         '401':
           description: This endpoint is only available to the Admin portal and not the other services
+      security:
+        - cognito: []
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-all-customers-lambda-arn}/invocations
         passthroughBehavior: when_no_match
@@ -102,12 +80,24 @@ paths:
                 $ref: '#/components/schemas/OrderandCustomer'
         '401':
           description: This endpoint is only available to the Admin portal and not the other services
+      security:
+        - cognito: []
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-all-orders-lambda-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
 components:
+  securitySchemes:
+    "cognito":
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        providerARNs:
+          - "${cognito_user_pool_arn}"
+        type: "cognito_user_pools"
   schemas:
     OrderRef:
       type: object

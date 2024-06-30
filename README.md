@@ -1,1 +1,2 @@
-Spec is in **api/electronics-retailer-openapi-v0-1-1.yaml**
+Service spec (i.e for other teams that want to access our service), is located in **api/service-electronics-retailer-openapi.yaml**
+Frontend spec is located in **api/fe-electronics-retailer-openapi.yaml**

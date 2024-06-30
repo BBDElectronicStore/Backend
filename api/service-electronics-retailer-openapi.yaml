@@ -1,0 +1,166 @@
+openapi: 3.0.3
+info:
+  title: Byte Bazaar Digital Service OpenAPI Specification
+  description: >-
+    Some useful links:
+
+    - [The Electronics Retailer
+    repository](https://github.com/BBDElectronicStore/BBD)
+  contact:
+    email: adrian.hawkins@bbd.co.za
+  version: 0.0.1
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://service.electronics.projects.bbdgrad.com
+tags:
+  - name: Byte Bazaar Digital
+    description: Buy your "Devices" From us (who else LOL)
+paths:
+  /store/price:
+    get:
+      tags:
+        - store
+      summary: Get the cost of items
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-price-lambda-arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+  /store/order:
+    post:
+      tags:
+        - store
+      summary: Create order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          description: Customer Successfully Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderRef'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation Exception
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${create-order-lambda-arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+components:
+  schemas:
+    OrderRef:
+      type: object
+      properties:
+        orderRef:
+          type: string
+    CustomerRef:
+      type: object
+      properties:
+        customerRef:
+          type: string   
+    Price:
+      type: object
+      properties:
+        total:
+          type: number
+        price:
+          type: number
+        vat: 
+          type: number
+    OrderandCustomer:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+        date:
+          type: integer
+          format: int64
+          example: 2024
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+            - placed
+            - approved
+            - complete # If the person says they got it
+            - denied
+            - cancelled
+      xml:
+        name: orderandcustomer
+    Order:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int64
+          example: 198772
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+      xml:
+        name: order
+    UserOrder:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int64
+          example: 198772
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+        status:
+          type: string
+          description: Order Status
+          example: placed
+          enum:
+            - placed
+            - approved
+            - collected
+            - denied
+            - cancelled
+      xml:
+        name: userorder
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 100000
+        username:
+          type: string
+          example: Bob
+        banking-details:
+          type: string
+          example: fgh239nzx82y3b
+      xml:
+        name: customer
+    UserCustomer:
+      type: object
+      properties:
+        banking-details:
+          type: string
+          example: fgh239nzx82y3b
+      xml:
+        name: customer

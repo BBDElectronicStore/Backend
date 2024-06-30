@@ -35,8 +35,6 @@ export class RetailBankService {
 
     }
 
-    // async getCurrentBalance(): Promise<number> {
-    //     return 5000;
-    // }
+
 
 }
