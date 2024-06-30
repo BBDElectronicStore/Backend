@@ -2,7 +2,8 @@ import {Stock} from "../interfaces/stock";
 import {StockService} from "../services/stock.service";
 
 export async function sell(oldStock: Stock[], newStock: Stock[]) {
-    const smallestPriceDifferenceStock: Stock = {
+    let biggestPriceDifference = -99999;
+    let biggestPriceDifferenceStock: Stock = {
         businessId: "0",
         SellPrice: -9999999,
         totalListedStock: 0
@@ -10,21 +11,20 @@ export async function sell(oldStock: Stock[], newStock: Stock[]) {
 
 
     newStock.forEach((currentStock ) => {
-        const previousStock = oldStock.find(prev => prev.businessId === currentStock .businessId);
+        const previousStock = oldStock.find(prev => prev.businessId === currentStock.businessId);
 
         // if not our stock then
         const priceDifference = previousStock ? currentStock.SellPrice - previousStock?.SellPrice : undefined;
 
-        if(priceDifference && priceDifference >= smallestPriceDifferenceStock.SellPrice){
-            smallestPriceDifferenceStock.SellPrice = priceDifference;
-            smallestPriceDifferenceStock.businessId = currentStock.businessId;
-            smallestPriceDifferenceStock.totalListedStock = currentStock.totalListedStock;
+        if(priceDifference && priceDifference >= biggestPriceDifference){
+            biggestPriceDifference = priceDifference;
+            biggestPriceDifferenceStock = currentStock;
         }
     });
 
     const service = new StockService();
-    const owned = await service.getMyStocks("1212");
-    const selected = owned.find(stock => stock.businessId === smallestPriceDifferenceStock.businessId);
+    const owned = await service.getMyStocks("1212"); //TODO get our userId from out special table in the DB
+    const selected = owned.find(stock => stock.businessId === biggestPriceDifferenceStock.businessId);
     if(selected) {
         // TODO: sell half the stocks idk?
         const amountToSell = selected.ownedStock/2;

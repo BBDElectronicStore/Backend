@@ -4,7 +4,7 @@ import {Stock} from "../interfaces/stock";
 
 export async function buy(budget: number, currentPrice: Stock[], previousPrice: Stock[]) {
     
-    let smallestPriceDifference = 0;
+    let smallestPriceDifference = 99999;
     let smallestPriceDifferenceStock: Stock = {
         businessId: "0",
         SellPrice: 9999999,
@@ -17,6 +17,7 @@ export async function buy(budget: number, currentPrice: Stock[], previousPrice: 
 
         if(priceDifference && priceDifference <= smallestPriceDifference){
             smallestPriceDifferenceStock = currentStock;
+            smallestPriceDifference = priceDifference;
         }
     });
 
@@ -24,7 +25,6 @@ export async function buy(budget: number, currentPrice: Stock[], previousPrice: 
     const maxStocksYouCanBuy = Math.floor(budget / smallestPriceDifferenceStock.SellPrice);
     const canBuy = Math.min(maxStocksYouCanBuy, smallestPriceDifferenceStock.totalListedStock);
 
-    // TODO  run the buy command?
     const stockService = new StockService();
     await stockService.makePurchase("BuyerId", smallestPriceDifferenceStock.businessId, canBuy);
     
