@@ -75,6 +75,7 @@ locals {
   domains = {
     "Backend"  = "api.electronics",
     "Frontend" = "electronics",
+    "Service" = "service.electronics"
   }
   trust_policy = jsonencode(
     {
