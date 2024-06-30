@@ -44,8 +44,8 @@ data "archive_file" "lambda" {
 }
 
 resource "aws_lambda_permission" "service-apigw" {
-  for_each      = local.lambda_list
-  statement_id  = "AllowServiceAPIGatewayInvoke"
+  for_each     = local.lambda_list
+  statement_id = "AllowServiceAPIGatewayInvoke"
 
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda[each.key].function_name
