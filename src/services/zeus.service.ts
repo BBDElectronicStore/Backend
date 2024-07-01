@@ -1,22 +1,32 @@
 import {BankDetails} from "../interfaces/bankDetails";
+import {makeSecureRequest} from "../helpers/mtls_request";
 
 export class ZeusService {
     url = 'https://api.zeus.projects.bbdgrad.com';
 
     async getPrice() {
         try {
-            const response = await fetch(`${this.url}/electronics-price`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+            const response = await makeSecureRequest(null, '/electronics-price', 'GET', 'api.zeus.projects.bbdgrad.com');
+            if (response?.status !== 200) {
+                throw new Error(`HTTP error! Status: ${response?.status}`);
             }
-            const data = await response.json();
-            return data.price;
+            console.log(response.data);
+            return response.data;
+        }
+        catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    async getTime() {
+        try {
+            const response = await makeSecureRequest(null, '/start-time', 'GET', 'api.zeus.projects.bbdgrad.com');
+            if (response?.status !== 200) {
+                throw new Error(`HTTP error! Status: ${response?.status}`);
+            }
+            console.log(response.data);
+            return response.data;
         }
         catch (e) {
             console.log(e);
