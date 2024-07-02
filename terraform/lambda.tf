@@ -69,7 +69,7 @@ resource "aws_lambda_permission" "fe-apigw" {
   principal     = "apigateway.amazonaws.com"
   # source_arn    = "${aws_apigatewayv2_api.electronics-retailer-api.execution_arn}/*/*" // FYI /*/*/* = PER API, /*/* = PER STAGE
   source_arn = "${aws_api_gateway_rest_api.frontend-electronics-retailer-api.execution_arn}/*/*" // FYI /*/*/* = PER API, /*/* = PER STAGE
-  
+
 }
 
 resource "aws_iam_policy" "lambda-sqs-policy" {

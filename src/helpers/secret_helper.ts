@@ -1,6 +1,6 @@
-import {S3 } from 'aws-sdk';
+import { S3 } from 'aws-sdk';
 
-const bucket:string = process.env.CERT_BUCKET || '';
+const bucket: string = process.env.CERT_BUCKET || '';
 const path = "electronics_retailer";
 export class S3Helper {
     s3 = new S3({ region: 'eu-west-1' });
