@@ -22,6 +22,14 @@
                 "sqs:DeleteMessage"
             ],
             "Resource": "*"
+        },
+        {
+            "Sid": "AllowS3Access",
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": "*"
         }
     ]
 }
