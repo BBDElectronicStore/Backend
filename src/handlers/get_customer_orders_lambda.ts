@@ -3,14 +3,16 @@ import {GetCustomerOrderQuery} from "../queries/getCustomerOrder.query";
 import {OrderRepository} from "../repositories/order.repository";
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  if(event.body === null || event.body === undefined)
+  const personaId = event.pathParameters?.personaId;
+
+  if (!personaId) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ message: 'Bad Request' }),
-    }
-  const data = JSON.parse(event.body);
+      body: JSON.stringify({ message: 'Bad Request: personaId is required' }),
+    };
+  }
   const command = new GetCustomerOrderQuery(new OrderRepository());
-  const res = await command.execute(data.personaId);
+  const res = await command.execute(personaId);
   return {
     statusCode: 200,
     body: JSON.stringify({
