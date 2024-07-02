@@ -1,41 +1,33 @@
+import {S3 } from 'aws-sdk';
 
-import { SecretsManager } from 'aws-sdk';
+const bucket = '268644478934-miniconomy-creds';
+const path = "electronics_retailer";
+export class S3Helper {
+    s3 = new S3({ region: 'eu-west-1' });
 
-
-export class SecretHelper {
-    secret_name = "Electronics-retailer-mtls-credentials";
-    secretsManager = new SecretsManager({ region: 'eu-west-1' });
-
-
-    async getSecret(secretName: string): Promise<string> {
+    async getObject(key: string): Promise<any> {
         try {
-            const response = await this.secretsManager.getSecretValue({ SecretId: secretName }).promise();
-            if (response.SecretString) {
-                return response.SecretString;
-            } else if (response.SecretBinary) {
-                return response.SecretBinary.toString('utf-8');
-            } else if (response.SecretString && response.SecretBinary) {
-                throw new Error('Both SecretString and SecretBinary found');
-            } else {
-                throw new Error('Secret value not found');
-            }
+            const response = await this.s3.getObject({ Bucket: bucket, Key: key }).promise();
+            return response.Body?.toString('utf-8');
         } catch (error) {
-            console.error('Error retrieving secret:', error);
+            console.error('Error retrieving object:', error);
             throw error;
         }
     }
 
-
-async getMTLSCredentials(): Promise<{ certificate: string, key: string }> {
-    try {
-        const secret = await this.getSecret(this.secret_name);
-        const { certificate, key } = JSON.parse(secret);
-        return { certificate, key };
-    } catch (error) {
-        console.error('Error retrieving MTLSCredentials:', error);
-        throw error;
+    async getMTLSCredentials(): Promise<{ certificate: string, key: string }> {
+        try {
+            const certificate = await this.getObject(`${path}.crt`);
+            const key = await this.getObject(`${path}.key`);
+            return {
+                certificate: certificate,
+                key: key
+            };
+        } catch (error) {
+            console.error('Error retrieving MTLSCredentials:', error);
+            throw error;
+        }
     }
-}
 }
 
 
