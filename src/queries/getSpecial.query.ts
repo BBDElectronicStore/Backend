@@ -2,7 +2,6 @@ import {IQuery} from "./IQeury";
 import {SpecialRepository} from "../repositories/special.repository";
 
 
-// TODO: Stefan please re-asses the types used here
 export class GetSpecialQuery implements IQuery<Promise<string>, [key:string]> {
 
     constructor(private readonly repository: SpecialRepository) {}
