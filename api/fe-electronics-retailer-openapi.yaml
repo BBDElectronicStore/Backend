@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Byte Bazaar Digital OpenAPI Specification
+  title: Byte Bazaar Digital Frontend OpenAPI Specification
   description: >-
     Some useful links:
 

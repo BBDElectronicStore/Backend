@@ -1,3 +1,4 @@
+import { makeSecureRequest } from "../helpers/mtls_request";
 import {BankDetails} from "../interfaces/bankDetails";
 
 export class InsuranceService {
@@ -7,19 +8,14 @@ export class InsuranceService {
         const payload = {
             electronicsPrice: price
         }
-        try {
-            const response = await fetch(`${this.url}/price`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+        try {
+            const response = await makeSecureRequest(payload, '/price', 'PATCH', 'api.insurance.projects.bbdgrad.com');
+            if (response?.status !== 200) {
+                throw new Error(`HTTP error! Status: ${response?.status}`);
             }
             return true;
+
         }
         catch (e) {
             console.log(e);
@@ -33,16 +29,9 @@ export class InsuranceService {
             electronicsAmount: amount
         }
         try {
-            const response = await fetch(`${this.url}/api/Electronics`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+            const response = await makeSecureRequest(payload, '/electronics', 'POST', 'api.insurance.projects.bbdgrad.com');
+            if (response?.status !== 200) {
+                throw new Error(`HTTP error! Status: ${response?.status}`);
             }
             return true;
         }

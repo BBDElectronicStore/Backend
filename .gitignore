@@ -133,3 +133,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 terraform/ts_lambda_bundle.zip
+
+.creds
+src/main.ts

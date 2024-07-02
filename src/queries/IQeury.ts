@@ -1,4 +1,4 @@
-export interface IQuery<T, Args extends any[] = []> {
+export interface IQuery<T, Args extends unknown[] = []> {
     execute(...args: Args): T;
     validate(...args: Args): boolean;
 }

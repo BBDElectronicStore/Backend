@@ -1,4 +1,5 @@
-import {BankDetails} from "../interfaces/bankDetails";
+import { makeSecureRequest } from "../helpers/mtls_request";
+import { BankDetails } from "../interfaces/bankDetails";
 
 export class RetailBankService {
     url = 'https://api.retailbank.projects.bbdgrad.com';
@@ -13,17 +14,13 @@ export class RetailBankService {
             },
             reference: `electronics-${orderRef}`,
         }
-        try {
-            const response = await fetch(`${this.url}/transactions/payments`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+
+
+        try {
+            const response = await makeSecureRequest(payload, '/transactions/payments', 'POST', 'api.retailbank.projects.bbdgrad.com');
+            if (response?.status !== 200) {
+                throw new Error(`HTTP error! Status: ${response?.status}`);
             }
             return true;
         }

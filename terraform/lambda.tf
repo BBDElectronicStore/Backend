@@ -1,5 +1,7 @@
 locals {
   dist_dir = "../dist"
+
+  certificate_bucket_name = "268644478934-miniconomy-creds"
   lambda_list = {
     "create-order-lambda" = {
       handler = "create_order_lambda.handler",
@@ -35,6 +37,12 @@ resource "aws_lambda_function" "lambda" {
   role             = aws_iam_role.terraform_function_role.arn
   source_code_hash = data.archive_file.lambda.output_base64sha256
   runtime          = "nodejs18.x"
+
+  environment {
+    variables = {
+      CERT_BUCKET = local.certificate_bucket_name
+    }
+  }
 }
 
 data "archive_file" "lambda" {
@@ -61,6 +69,7 @@ resource "aws_lambda_permission" "fe-apigw" {
   principal     = "apigateway.amazonaws.com"
   # source_arn    = "${aws_apigatewayv2_api.electronics-retailer-api.execution_arn}/*/*" // FYI /*/*/* = PER API, /*/* = PER STAGE
   source_arn = "${aws_api_gateway_rest_api.frontend-electronics-retailer-api.execution_arn}/*/*" // FYI /*/*/* = PER API, /*/* = PER STAGE
+
 }
 
 resource "aws_iam_policy" "lambda-sqs-policy" {
