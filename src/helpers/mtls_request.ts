@@ -20,8 +20,6 @@ export async function makeSecureRequest(data: any, path: string, method: string,
             data: data ? JSON.stringify(data) : null,
             httpsAgent: httpsAgent
         });
-
-        console.log('Response:', response.data);
         return response;
     } catch (error) {
         console.error('Error:', error);
