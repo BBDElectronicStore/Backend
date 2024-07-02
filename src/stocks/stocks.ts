@@ -11,7 +11,7 @@ import { CommercialBankService } from "../services/commercial.bank.service";
 // import {UpdateStatusCommand} from "../commands/updateStocks.command";
 
 
-export async function main() {
+export async function handleStocks() {
     // register business and sell x% of shares
 
     // allowance per job run

@@ -18,7 +18,17 @@ locals {
     },
     "get-price-lambda" = {
       handler = "get_item_price_lambda.handler",
-    }
+    },
+    "handle_stocks_lambda" = {
+      handler = "handle_stocks_lambda.handler",
+    },
+    "pay_tax_lambda" = {
+      handler = "pay_tax_lambda.handler",
+    },
+    "zeus_control_lambda" = {
+      handler = "zeus_control_lambda.handler",
+    },
+
   }
 }
 
