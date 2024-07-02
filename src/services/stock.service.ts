@@ -1,5 +1,6 @@
 import {Stock} from "../interfaces/stock";
 import {MyStock} from "../interfaces/myStock";
+import { RegisterStock } from "../interfaces/registerStock";
 
 export class StockService {
     url = 'https://api.mese.projects.bbdgrad.com';
@@ -65,6 +66,7 @@ export class StockService {
         }
     }
 
+    // TODO Still need to implement
     async getMyStocks(userId: string): Promise<MyStock[]> {
         return [
             {
@@ -97,6 +99,32 @@ export class StockService {
         catch (e) {
             console.log(e);
             return false;
+        }
+    }
+
+    async registerMyBusiness(name: string, bankAccount: string): Promise<RegisterStock | undefined>{
+        try {
+            const payload = {
+                name,
+                bankAccount
+            }
+            const response = await fetch(`${this.url}/business`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data;
+        }
+        catch (e) {
+            console.log(e);
+            return undefined;
         }
     }
 
