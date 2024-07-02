@@ -5,7 +5,7 @@ const path = "electronics_retailer";
 export class S3Helper {
     s3 = new S3({ region: 'eu-west-1' });
 
-    async getObject(key: string): Promise<any> {
+    async getObject(key: string) {
         try {
             const response = await this.s3.getObject({ Bucket: bucket, Key: key }).promise();
             return response.Body?.toString('utf-8');
@@ -15,7 +15,7 @@ export class S3Helper {
         }
     }
 
-    async getMTLSCredentials(): Promise<{ certificate: string, key: string }> {
+    async getMTLSCredentials() {
         try {
             const certificate = await this.getObject(`${path}.crt`);
             const key = await this.getObject(`${path}.key`);

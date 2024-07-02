@@ -1,8 +1,8 @@
 import https from 'https';
-import axios, { Axios, AxiosResponse } from "axios";
-import { S3Helper } from './secret_helper';
+import axios from "axios";
+import {S3Helper} from './secret_helper';
 
-export async function makeSecureRequest(data: any, path: string, method: string, hostname: string) {
+export async function makeSecureRequest<T>(data: T, path: string, method: string, hostname: string) {
     try {
 
         const s3Helper = new S3Helper();
@@ -12,15 +12,14 @@ export async function makeSecureRequest(data: any, path: string, method: string,
             cert: certificate,
             key: key,
         });
-        
 
-        const response = await axios.request({
+
+        return await axios.request({
             method: method,
             url: `https://${hostname}${path}`,
             data: data ? JSON.stringify(data) : null,
             httpsAgent: httpsAgent
         });
-        return response;
     } catch (error) {
         console.error('Error:', error);
     }

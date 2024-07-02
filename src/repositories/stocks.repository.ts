@@ -5,7 +5,7 @@ import {QueryResult} from "pg";
 
 
 export class StocksRepository implements IRepository {
-    async updateStocks(stocks: Stock[]): Promise<any> {
+    async updateStocks(stocks: Stock[]) {
         const stockData = JSON.stringify(stocks);
         try {
             await DBPool.query('BEGIN');
