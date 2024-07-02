@@ -8,18 +8,17 @@ locals {
 
 
   frequent_lambda_targets = {
-    "get-price-lambda" = {
-      body = jsonencode({
-        ExampleBody = "Greetings, programs!"
-      })
+    "update-price-lambda" = {
+      body = ""
     }
   }
 
   now_and_then_lambda_targets = {
-    "get-price-lambda" = {
-      body = jsonencode({
-        ExampleBody = "Greetings, programs!"
-      })
+    "pay-tax-lambda" = {
+      body = ""
+    },
+    "handle-stocks-lambda" = {
+      body = ""
     }
   }
 }
