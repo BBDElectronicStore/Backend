@@ -61,8 +61,35 @@ paths:
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
+  /zeus/control:
+    post:
+      tags:
+        - zeus
+      summary: Lets hand of zeus start or reset the system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HandOfZeus'
+      responses:
+        '200':
+          description: Command Successfully Executed
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation Exception
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${zeus-control-lambda-arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
 components:
   schemas:
+    HandOfZeus:
+      type: string
+      enum:
+        - start
+        - reset
     OrderRef:
       type: object
       properties:

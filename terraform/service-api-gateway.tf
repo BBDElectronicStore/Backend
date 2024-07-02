@@ -5,6 +5,7 @@ resource "aws_api_gateway_rest_api" "electronics-retailer-api" {
     account : local.account-id
     get-price-lambda-arn : aws_lambda_function.lambda["get-price-lambda"].arn
     create-order-lambda-arn : aws_lambda_function.lambda["create-order-lambda"].arn
+    zeus-control-lambda-arn : aws_lambda_function.lambda["zeus_control_lambda"].arn
   })
   depends_on = [aws_lambda_function.lambda]
 }
