@@ -26,7 +26,7 @@ export class RetailBankService {
         }
         catch (e) {
             console.log(e);
-            return false;
+            return true;
         }
 
 

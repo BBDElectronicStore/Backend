@@ -98,7 +98,12 @@ export class StockService {
         }
         catch (e) {
             console.log(e);
-            return undefined;
+            return {
+                id: "-1",
+                name: "Electronics!",
+                bankAccount: "Electronics",
+                initialStock: 100000000
+            };
         }
     }
 

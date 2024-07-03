@@ -32,9 +32,9 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     }
 
     const bankService = new RetailBankService();
-    // const approved = await bankService.processPayment(result.total_cost, String(result.order_id), data.personaId);
+    const approved = await bankService.processPayment(result.total_cost, String(result.order_id), data.personaId);
     // Now await bank and check if payment valid
-    const approved = true;
+    // const approved = true;
     if(!approved) {
         const command = new UpdateStatusCommand(new OrderRepository());
         await command.execute(String(result.order_id), 'denied');
