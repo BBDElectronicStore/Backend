@@ -84,10 +84,10 @@ export class OrderRepository implements IRepository {
             const VAT = productResult.rows[0].VAT;
             const zeusService = new ZeusService();
             const priceCheck = await zeusService.getPrice();
-            if(priceCheck && priceCheck > price) {
+            if(priceCheck && priceCheck !== price) {
                 price = priceCheck;
                 const command = new UpdatePriceCommand(new ProductRepository());
-                await command.execute(price);
+                await command.execute(priceCheck, 15);
             }
             const totalCost = Math.round(price * quantity * (1 + VAT / 100));
 

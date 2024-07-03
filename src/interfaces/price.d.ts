@@ -1,4 +1,5 @@
 export interface Price {
     price: number;
-    VAT: number;
+    vat: number;
+    total: number;
 }
