@@ -10,12 +10,12 @@ import {ProductRepository} from "../repositories/product.repository";
 
 
 export async function start() {
-    const stockService = new StockService();
-    const registrationResponse = await stockService.registerMyBusiness('Electronics', "electronics-retailer");
-    if(registrationResponse) {
-        const command = new SpecialValueCommand(new SpecialRepository());
-        await command.execute('StockId', registrationResponse.id);
-    }
+    // const stockService = new StockService();
+    // const registrationResponse = await stockService.registerMyBusiness('Electronics', "electronics-retailer");
+    // if(registrationResponse) {
+    //     const command = new SpecialValueCommand(new SpecialRepository());
+    //     await command.execute('StockId', registrationResponse.id);
+    // }
     const service = new ZeusService();
     const price = await service.getPrice();
     const command = new UpdatePriceCommand(new ProductRepository());
