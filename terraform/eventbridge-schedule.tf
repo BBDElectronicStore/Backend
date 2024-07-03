@@ -31,7 +31,7 @@ resource "aws_scheduler_schedule" "stocks-scheduler" {
     mode = "OFF"
   }
 
-  schedule_expression = local.hourly_schedule
+  schedule_expression = local.two_minute_schedule
 
   target {
     arn      = aws_lambda_function.lambda["handle_stocks_lambda"].arn
