@@ -43,7 +43,7 @@ export class ProductRepository implements IRepository {
             return null;
             // return result.rows[0];
         } catch (error) {
-            return null;
+            return error as any;
         }
     }
 }
