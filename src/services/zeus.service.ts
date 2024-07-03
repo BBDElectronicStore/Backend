@@ -11,12 +11,7 @@ export class ZeusService {
                 throw new Error(`HTTP error! Status: ${response?.status}`);
             }
             console.log(response.data);
-            if(response.data.value)
-                return response.data;
-            else
-                return {
-                    value: response.data
-                };
+            return response.data;
         }
         catch (e) {
             console.log(e);
