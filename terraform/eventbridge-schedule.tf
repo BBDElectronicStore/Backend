@@ -21,7 +21,6 @@ resource "aws_scheduler_schedule" "frequent-scheduler" {
   target {
     arn      = aws_lambda_function.lambda["update_price_lambda"].arn
     role_arn = aws_iam_role.scheduler_role.arn
-    input    = ""
   }
 }
 
@@ -37,7 +36,6 @@ resource "aws_scheduler_schedule" "stocks-scheduler" {
   target {
     arn      = aws_lambda_function.lambda["handle_stocks_lambda"].arn
     role_arn = aws_iam_role.scheduler_role.arn
-    input    = ""
   }
 }
 
@@ -53,7 +51,6 @@ resource "aws_scheduler_schedule" "pay-tax-scheduler" {
   target {
     arn      = aws_lambda_function.lambda["pay_tax_lambda"].arn
     role_arn = aws_iam_role.scheduler_role.arn
-    input    = ""
   }
 
 }
