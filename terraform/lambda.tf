@@ -47,6 +47,7 @@ data "aws_secretsmanager_secret_version" "db-details" {
 resource "aws_lambda_function" "lambda" {
   for_each      = local.lambda_list
   function_name = each.key
+  timeout = 60
 
   vpc_config {
     subnet_ids         = module.vpc.public_subnets
