@@ -1,9 +1,9 @@
-import { ResetQuery } from "../queries/reset.query";
+import { ResetCommand } from "../commands/reset.command";
 import { ResetRepository } from "../repositories/reset.repository";
 
 
-export async function main() {
+export async function reset() {
 
-    await new ResetQuery(new ResetRepository()).execute();
+    await new ResetCommand(new ResetRepository()).execute();
 
 }
