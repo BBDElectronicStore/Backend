@@ -1,17 +1,11 @@
 locals {
   // using cron(minutes hours day-of-month month day-of-week year)
   // make it run every 2 minutes starting on the hour
-  frequent_expression = "cron(0/2 * * * ? *)"
+  two_minute_schedule = "cron(0/2 * * * ? *)"
   // using cron(minutes hours day-of-month month day-of-week year)
   // make it run every 1 hour starting on the hour
-  now_and_then_expression = "cron(0 0/1 * * ? *)"
+  hourly_schedule = "cron(0 0/1 * * ? *)"
 
-
-  frequent_lambda_targets = {
-    "update-price-lambda" = {
-      body = ""
-    }
-  }
 }
 
 
@@ -22,17 +16,12 @@ resource "aws_scheduler_schedule" "frequent-scheduler" {
     mode = "OFF"
   }
 
-  schedule_expression = local.frequent_expression
+  schedule_expression = local.two_minute_schedule
 
-  dynamic "target" {
-    for_each = local.frequent_lambda_targets
-    content {
-      arn      = aws_lambda_function.lambda[target.key].arn
-      role_arn = aws_iam_role.scheduler_role.arn
-
-      input = target.value.body
-    }
-
+  target {
+    arn      = aws_lambda_function.lambda["update_price_lambda"].arn
+    role_arn = aws_iam_role.scheduler_role.arn
+    input    = ""
   }
 }
 
@@ -43,10 +32,10 @@ resource "aws_scheduler_schedule" "stocks-scheduler" {
     mode = "OFF"
   }
 
-  schedule_expression = local.now_and_then_expression
+  schedule_expression = local.hourly_schedule
 
   target {
-    arn      = aws_lambda_function.lambda["handle-stocks-lambda"].arn
+    arn      = aws_lambda_function.lambda["handle_stocks_lambda"].arn
     role_arn = aws_iam_role.scheduler_role.arn
     input    = ""
   }
@@ -59,10 +48,10 @@ resource "aws_scheduler_schedule" "pay-tax-scheduler" {
     mode = "OFF"
   }
 
-  schedule_expression = local.now_and_then_expression
+  schedule_expression = local.hourly_schedule
 
   target {
-    arn      = aws_lambda_function.lambda["pay-tax-lambda"].arn
+    arn      = aws_lambda_function.lambda["pay_tax_lambda"].arn
     role_arn = aws_iam_role.scheduler_role.arn
     input    = ""
   }
