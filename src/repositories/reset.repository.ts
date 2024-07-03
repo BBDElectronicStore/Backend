@@ -7,8 +7,8 @@ export class ResetRepository implements IRepository {
         try {
             await DBPool.query('BEGIN');
             const resetResult = await DBPool.query(`
-              DELETE FROM "customers";
               DELETE FROM "orders";
+              DELETE FROM "customers";
               DELETE FROM "special";
             `);
             await DBPool.query('COMMIT');
