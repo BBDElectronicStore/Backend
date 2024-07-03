@@ -15,6 +15,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const res = await command.execute(personaId);
   return {
     statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+  },
     body: JSON.stringify({
       message: 'OK',
       data: res
