@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Byte Bazaar Digital OpenAPI Specification
+  title: Byte Bazaar Digital Service OpenAPI Specification
   description: >-
     Some useful links:
 
@@ -13,7 +13,7 @@ externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
 servers:
-  - url: https://api.electronics.projects.bbdgrad.com
+  - url: https://service.electronics.projects.bbdgrad.com
 tags:
   - name: Byte Bazaar Digital
     description: Buy your "Devices" From us (who else LOL)
@@ -30,6 +30,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Price'
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-price-lambda-arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
   /store/order:
     post:
       tags:
@@ -41,136 +46,50 @@ paths:
             schema:
               $ref: '#/components/schemas/Order'
       responses:
-        '201':
-          description: Customer Successfully Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderRef'
+        '200':
+          description: Here is products
         '400':
           description: Invalid input
         '422':
           description: Validation Exception
-  /store/order/{orderRef}:
-    get:
-      tags:
-        - store
-      summary: Find purchase order by ID
-      parameters:
-        - name: orderRef
-          in: path
-          description: ID of order that needs to be fetched
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserOrder'
-        '400':
-          description: Invalid ID supplied
-        '404': # Also used for when a user isn't authorised to do this
-          description: Order not found
-    put:
-      tags:
-        - store
-      summary: Cancel purchase order by ID
-      parameters:
-        - name: orderRef
-          in: path
-          description: ID of the order that needs to be deleted
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '204':
-          description: All Good
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderRef'
-        '400':
-          description: Invalid ID supplied
-        '404': # Also used for when a user isn't authorised to do this
-          description: Order not found
-  /customer:
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${create-order-lambda-arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+  /zeus/control:
     post:
       tags:
-        - customer
-      summary: Create customer - so that they can buy from us
+        - zeus
+      summary: Lets hand of zeus start or reset the system
       requestBody:
-        description: Created user object
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Customer'
+              $ref: '#/components/schemas/HandOfZeus'
       responses:
-        '204':
-          description: Customer Successfully Created
+        '200':
+          description: Command Successfully Executed
         '400':
-          description: The client performed an incorrect action (either the wrong banking details or already has an account)
-    get:
-      tags:
-        - customer
-      summary: Get all customers
-      responses:
-        '200':
-          description: Customer Successfully Created (Plus a list of the customer and their order history)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '401':
-          description: This endpoint is only available to the Admin portal and not the other services
-  /customer/{customerId}:
-    get:
-      tags:
-        - customer
-      summary: Get all orders for a customer
-      responses:
-        '200':
-          description: Customer Successfully Created (Plus a list of the customer and their order history)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderandCustomer'
-        '401':
-          description: This endpoint is only available to the Admin portal and not the other services
-  /customer/{customerRef}:
-    put:
-      tags:
-        - customer
-      summary: update the banking details of a customer using their ID
-      parameters:
-        - name: customerRef
-          in: path
-          description: ID of the customer to update
-          required: true
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        description: Customer new banking details
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCustomer'
-      responses:
-        '200':
-          description: Details updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomerRef'
-        '400':
-          description: The client performed an incorrect action (probably invalid banking details)
+          description: Invalid input
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${zeus-control-lambda-arn}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
 components:
   schemas:
+    HandOfZeus:
+      type: object
+      properties:
+        action:
+          type: string
+          enum:
+            - start
+            - reset
+        startTime:
+          type: string
+          example: timeStamp
     OrderRef:
       type: object
       properties:
@@ -216,7 +135,7 @@ components:
     Order:
       type: object
       properties:
-        customerId:
+        personaId:
           type: integer
           format: int64
           example: 198772
@@ -229,7 +148,7 @@ components:
     UserOrder:
       type: object
       properties:
-        customerId:
+        personaId:
           type: integer
           format: int64
           example: 198772
