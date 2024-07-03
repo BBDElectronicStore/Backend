@@ -2,11 +2,10 @@ locals {
   dist_dir = "../dist"
 
   certificate_bucket_name = "268644478934-miniconomy-creds"
-  # postgresql://dbuser:secretpassword@localhost:5432/mydatabase
-  username = module.rds.db_instance_username
-  password = jsondecode(data.aws_secretsmanager_secret_version.db-details.secret_string)["password"]
-  port     = module.rds.db_instance_port
-  dbname   = local.db-name
+  username                = module.rds.db_instance_username
+  password                = jsondecode(data.aws_secretsmanager_secret_version.db-details.secret_string)["password"]
+  port                    = module.rds.db_instance_port
+  dbname                  = local.db-name
   lambda_list = {
     "create-order-lambda" = {
       handler = "create_order_lambda.handler",
@@ -51,7 +50,7 @@ resource "aws_lambda_function" "lambda" {
 
   vpc_config {
     subnet_ids         = module.vpc.public_subnets
-    security_group_ids = [module.vpc.default_security_group_id]
+    security_group_ids = [module.vpc.default_security_group_id, aws_security_group.rds.id]
   }
   memory_size = 256
   filename    = "ts_lambda_bundle.zip"
