@@ -3,3 +3,7 @@ databaseChangeLog:
       file: ./database/main-script.sql
   - include:
       file: ./database/key-value-table.sql
+  - include:
+      file: ./database/stocks-table.sql
+  - include:
+        file: ./database/purchase-time.sql

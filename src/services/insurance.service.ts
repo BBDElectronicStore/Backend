@@ -26,10 +26,10 @@ export class InsuranceService {
     async insureElectronic(personaId: string, amount: number)  {
         const payload = {
             personaId: personaId,
-            electronicsAmount: amount
+            amountNew: amount
         }
         try {
-            const response = await makeSecureRequest(payload, '/electronics', 'POST', 'api.insurance.projects.bbdgrad.com');
+            const response = await makeSecureRequest(payload, '/api/electronics', 'PUT', 'api.insurance.projects.bbdgrad.com');
             if (response?.status !== 200) {
                 throw new Error(`HTTP error! Status: ${response?.status}`);
             }
