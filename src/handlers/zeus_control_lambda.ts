@@ -13,14 +13,14 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             body: JSON.stringify({ message: 'Bad Request' }),
         }
     const data = JSON.parse(event.body);
-    const status = data.action || "";
+    const action = data.action || "";
     const startTime = data.startTime;
-    if(status === status.reset) {
+    if(action === status.reset) {
         await reset();
         const command = new SpecialValueCommand(new SpecialRepository());
         await command.execute('zeusEnabled', 'false');
     }
-    else if(status === status.start) {
+    else if(action === status.start) {
         // Current issue with downstream service
         Logger.debug("start");
         const command = new SpecialValueCommand(new SpecialRepository());
