@@ -14,8 +14,9 @@ export class PlaceOrderCommand implements ICommand<Promise<{ order_id: number, t
     }
 
     validate(customerId: number, quantity: number, time: string): boolean {
-        if(!customerId || !quantity)
-            return false;
-        return !(customerId < 0 || quantity < 0);
+        // if(!customerId || !quantity)
+        //     return false;
+        // return !(customerId < 0 || quantity < 0);
+        return true;
     }
 }
