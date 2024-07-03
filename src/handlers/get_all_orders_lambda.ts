@@ -8,9 +8,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     const res = await command.execute();
     return {
         statusCode: 200,
-        body: JSON.stringify({
-            message: 'OK',
-            data: res
-        }),
+        headers: {
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        },
+        body: JSON.stringify(res),
     };
 };
