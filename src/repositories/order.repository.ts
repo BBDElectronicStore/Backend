@@ -71,10 +71,13 @@ export class OrderRepository implements IRepository {
                 ORDER BY "product_id"
                 LIMIT 1
             `;
-
+            console.log("gettingOrCreatingCustomerId");
             const actualId = await this.getOrCreateCustomerId(customerId.toString());
+            console.log("DONE gettingOrCreatingCustomerId");
+            console.log({actualId});
 
             const productResult = await DBPool.query(fetchProductQuery);
+            console.log({productResult});
 
             if (productResult.rows.length === 0) {
                 throw new Error("No products found");
@@ -82,25 +85,37 @@ export class OrderRepository implements IRepository {
 
             let price = productResult.rows[0].price;
             const VAT = productResult.rows[0].VAT;
+            console.log({price}, typeof price);
+            console.log({VAT}, typeof VAT);
             const zeusService = new ZeusService();
             const priceCheck = await zeusService.getPrice();
+            console.log({priceCheck}, typeof priceCheck);
             if(priceCheck && priceCheck !== price) {
                 price = priceCheck;
                 const command = new UpdatePriceCommand(new ProductRepository());
                 await command.execute(priceCheck, 15);
             }
             const totalCost = Math.round(price * quantity * (1 + VAT / 100));
+            console.log({totalCost}, typeof totalCost);
+
+            console.log({time}, typeof time);
+            console.log({quantity}, typeof quantity);
 
             const orderResult = await DBPool.query(`
                 INSERT INTO "orders" ("customer_id", "quantity", "status_id", "total_cost", "purchase_time")
                 VALUES ($1, $2, (SELECT "status_id" FROM "status" WHERE "status_name" = 'pending'), $3, $4)
                 RETURNING "order_id"
             `, [actualId, quantity, totalCost, time]);
+            
+            console.log("Finished getting order result");
+            console.log({orderResult}, typeof orderResult);
 
             if (orderResult.rows.length === 0) {
                 throw new Error('Failed to insert new order.');
             }
+            console.log("Extracting orderId");
             const orderId = orderResult.rows[0].order_id;
+            console.log({orderId}, typeof orderId);
             await DBPool.query('COMMIT');
             return { order_id: orderId, total_cost: totalCost };
         } catch (error) {
