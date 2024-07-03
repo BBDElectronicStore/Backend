@@ -27,8 +27,8 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     //         statusCode: 500,
     //         body: JSON.stringify({ message: 'Internal Server Error' }),
     //     };
-    // const service = new ZeusService();
-    // const price = await service.getPrice();
+    const service = new ZeusService();
+    const price = await service.getPrice();
     return {
         statusCode: 200,
         body: JSON.stringify({ message: 'OK' }),
