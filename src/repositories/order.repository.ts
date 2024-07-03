@@ -87,7 +87,7 @@ export class OrderRepository implements IRepository {
             if(priceCheck && priceCheck > price) {
                 price = priceCheck;
                 const command = new UpdatePriceCommand(new ProductRepository());
-                await command.execute(price);
+                await command.execute(price, 15);
             }
             const totalCost = Math.round(price * quantity * (1 + VAT / 100));
 

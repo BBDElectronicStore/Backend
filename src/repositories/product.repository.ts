@@ -6,18 +6,18 @@ import {Price} from "../interfaces/price";
 
 export class ProductRepository implements IRepository {
 
-    async updateProductPriceAndVAT(newPrice: number) {
+    async updateProductPriceAndVAT(newPrice: number, newVat: number) {
         try {
             const result = await DBPool.query(`
               UPDATE "products"
-              SET "price" = $1
+              SET "price" = $1, "VAT" = $2
               WHERE "product_id" = (
                 SELECT "product_id"
                 FROM "products"
                 ORDER BY "product_id"
                 LIMIT 1
               )
-            `, [newPrice]);
+            `, [newPrice, newVat]);
 
             return result.rowCount;
         } catch (error) {
