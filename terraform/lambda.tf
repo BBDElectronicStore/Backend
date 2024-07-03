@@ -18,6 +18,9 @@ locals {
     "get-all-orders-lambda" = {
       handler = "get_all_orders_lambda.handler",
     },
+    "update_price_lambda" = {
+      handler = "update_price_lambda.handler",
+    },
 
     "get-customer-orders-lambda" = {
       handler = "get_customer_orders_lambda.handler",
