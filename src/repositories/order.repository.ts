@@ -122,7 +122,7 @@ export class OrderRepository implements IRepository {
         } catch (error) {
             await DBPool.query('ROLLBACK');
             console.error('Error placing order:', error);
-            return error as any;
+            return null;
         }
     }
 
