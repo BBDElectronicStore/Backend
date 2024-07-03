@@ -52,9 +52,9 @@ resource "aws_scheduler_schedule" "stocks-scheduler" {
   schedule_expression = local.now_and_then_expression
 
   target {
-    arn = aws_lambda_function.lambda["handle-stocks-lambda"].arn
+    arn      = aws_lambda_function.lambda["handle-stocks-lambda"].arn
     role_arn = aws_iam_role.scheduler_role.arn
-    input = ""
+    input    = ""
   }
 }
 
@@ -68,11 +68,11 @@ resource "aws_scheduler_schedule" "pay-tax-scheduler" {
   schedule_expression = local.now_and_then_expression
 
   target {
-    arn = aws_lambda_function.lambda["pay-tax-lambda"].arn
+    arn      = aws_lambda_function.lambda["pay-tax-lambda"].arn
     role_arn = aws_iam_role.scheduler_role.arn
-    input = ""
+    input    = ""
   }
-  
+
 }
 
 resource "aws_iam_role" "scheduler_role" {
