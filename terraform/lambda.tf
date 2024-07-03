@@ -3,10 +3,10 @@ locals {
 
   certificate_bucket_name = "268644478934-miniconomy-creds"
   # postgresql://dbuser:secretpassword@localhost:5432/mydatabase
-  username = module.rds.db_instance_username
-  password = "${jsondecode(data.aws_secretsmanager_secret_version.db-details.secret_string)["password"]}"
-  port    = module.rds.db_instance_port
-  dbname = local.db-name
+  username          = module.rds.db_instance_username
+  password          = jsondecode(data.aws_secretsmanager_secret_version.db-details.secret_string)["password"]
+  port              = module.rds.db_instance_port
+  dbname            = local.db-name
   connection_string = "postgres://${local.username}:${local.password}@miniconomy-db:${local.port}/${local.dbname}"
   lambda_list = {
     "create-order-lambda" = {
@@ -60,7 +60,7 @@ resource "aws_lambda_function" "lambda" {
 
   environment {
     variables = {
-      CERT_BUCKET = local.certificate_bucket_name
+      CERT_BUCKET          = local.certificate_bucket_name
       DB_CONNECTION_STRING = local.connection_string
     }
   }
