@@ -26,7 +26,7 @@ locals {
       handler = "get_customer_orders_lambda.handler",
     },
     "get-price-lambda" = {
-      handler = "get_item_price_lambda.handler",
+      handler = "get_price_lambda.handler",
     },
     "handle_stocks_lambda" = {
       handler = "handle_stocks_lambda.handler",
