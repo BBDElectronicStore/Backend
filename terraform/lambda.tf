@@ -67,7 +67,7 @@ resource "aws_lambda_function" "lambda" {
       DBPASSWORD  = local.password
       DBPORT      = local.port
       DBNAME      = local.dbname
-      DBHOST      = module.rds.db_instance_endpoint
+      DBHOST      = module.rds.db_instance_address
     }
   }
 }
