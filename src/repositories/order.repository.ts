@@ -61,7 +61,7 @@ export class OrderRepository implements IRepository {
     }
 
 
-    async placeOrderAndGetTotalCost(quantity: number, customerId: number): Promise<any> {
+    async placeOrderAndGetTotalCost(quantity: number, customerId: number, time: string): Promise<any> {
         try {
             await DBPool.query('BEGIN');
 
@@ -92,10 +92,10 @@ export class OrderRepository implements IRepository {
             const totalCost = Math.round(price * quantity * (1 + VAT / 100));
 
             const orderResult = await DBPool.query(`
-                INSERT INTO "orders" ("customer_id", "quantity", "status_id", "total_cost")
-                VALUES ($1, $2, (SELECT "status_id" FROM "status" WHERE "status_name" = 'pending'), $3)
+                INSERT INTO "orders" ("customer_id", "quantity", "status_id", "total_cost", "purchase_time")
+                VALUES ($1, $2, (SELECT "status_id" FROM "status" WHERE "status_name" = 'pending'), $3, $4)
                 RETURNING "order_id"
-            `, [actualId, quantity, totalCost]);
+            `, [actualId, quantity, totalCost, time]);
 
             if (orderResult.rows.length === 0) {
                 throw new Error('Failed to insert new order.');

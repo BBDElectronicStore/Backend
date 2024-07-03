@@ -5,6 +5,9 @@ import {RetailBankService} from "../services/retail.bank.service";
 import {PlaceOrder} from "../interfaces/placeOrder";
 import {InsuranceService} from "../services/insurance.service";
 import {UpdateStatusCommand} from "../commands/updateStatus.command";
+import {GetSpecialQuery} from "../queries/getSpecial.query";
+import {SpecialRepository} from "../repositories/special.repository";
+import {Simulation} from "../helpers/time";
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
@@ -15,7 +18,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         body: JSON.stringify({ message: 'Bad Request' }),
     }
     const data = JSON.parse(event.body);
-    const result: PlaceOrder | null = await placeOrderCommand.execute(data.personaId, data.quantity);
+    const query = new GetSpecialQuery(new SpecialRepository());
+    const value = await query.execute('startTime');
+    const timeCalc = new Simulation(value);
+    const time = timeCalc.updateDate();
+    const result: PlaceOrder | null = await placeOrderCommand.execute(data.personaId, data.quantity, time.date);
     if(result === null) {
         return {
             statusCode: 500,
@@ -24,8 +31,9 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     }
 
     const bankService = new RetailBankService();
-    const approved = await bankService.processPayment(result.total_cost, String(result.order_id), data.bankDetails);
+    // const approved = await bankService.processPayment(result.total_cost, String(result.order_id), data.personaId);
     // Now await bank and check if payment valid
+    const approved = true;
     if(!approved) {
         const command = new UpdateStatusCommand(new OrderRepository());
         await command.execute(String(result.order_id), 'denied');
@@ -36,6 +44,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     }
     // Great payment was valid now let's insure!
     const insuranceService = new InsuranceService();
+    console.log(data.personaId, result.total_cost)
     const insured = await insuranceService.insureElectronic(data.personaId, result.total_cost);
     if(!insured) {
         return {

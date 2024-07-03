@@ -1,8 +1,8 @@
-import {IQuery} from "./IQeury";
+import {IQuery} from "../queries/IQeury";
 import { ResetRepository } from "../repositories/reset.repository";
 
 
-export class ResetQuery implements IQuery<Promise<void>> {
+export class ResetCommand implements IQuery<Promise<void>> {
 
     constructor(private readonly repository: ResetRepository) {}
 

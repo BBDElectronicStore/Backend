@@ -29,7 +29,7 @@ export class SpecialRepository implements IRepository {
               WHERE
                 s.key = $1;
               `, [key]);
-            return res.rows[0];
+            return String(res.rows[0]);
           } catch (e) {
             console.log('Error getting special value: ',e);
             throw e;
