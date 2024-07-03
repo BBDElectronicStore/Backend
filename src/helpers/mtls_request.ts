@@ -16,6 +16,9 @@ export async function makeSecureRequest<T>(data: T, path: string, method: string
 
         return await axios.request({
             method: method,
+            headers: {
+              "X-Origin": "electronics_retailer"
+            },
             url: `https://${hostname}${path}`,
             data: data ? JSON.stringify(data) : null,
             httpsAgent: httpsAgent

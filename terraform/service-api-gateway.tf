@@ -38,9 +38,6 @@ resource "aws_api_gateway_domain_name" "electronics-retailer-api-gw-domain-name"
 
   regional_certificate_arn = data.aws_acm_certificate.issued.arn
   security_policy          = "TLS_1_2"
-  mutual_tls_authentication {
-    truststore_uri = "s3://miniconomy-trust-store-bucket/truststore.pem"
-  }
   endpoint_configuration {
     types = ["REGIONAL"]
   }
