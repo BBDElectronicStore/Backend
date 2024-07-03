@@ -2,7 +2,6 @@ locals {
   dist_dir = "../dist"
 
   certificate_bucket_name = "268644478934-miniconomy-creds"
-  # postgresql://dbuser:secretpassword@localhost:5432/mydatabase
   username = module.rds.db_instance_username
   password = jsondecode(data.aws_secretsmanager_secret_version.db-details.secret_string)["password"]
   port     = module.rds.db_instance_port
@@ -49,10 +48,10 @@ resource "aws_lambda_function" "lambda" {
   function_name = each.key
   timeout = 60
 
-  vpc_config {
-    subnet_ids         = module.vpc.public_subnets
-    security_group_ids = [module.vpc.default_security_group_id]
-  }
+  # vpc_config {
+  #   subnet_ids         = module.vpc.public_subnets
+  #   security_group_ids = [module.vpc.default_security_group_id]
+  # }
   memory_size = 256
   filename    = "ts_lambda_bundle.zip"
   handler     = "handlers/${each.value.handler}"
