@@ -48,10 +48,10 @@ resource "aws_lambda_function" "lambda" {
   function_name = each.key
   timeout       = 60
 
-  # vpc_config {
-  #   subnet_ids         = module.vpc.public_subnets
-  #   security_group_ids = [module.vpc.default_security_group_id]
-  # }
+  vpc_config {
+    subnet_ids         = module.vpc.public_subnets
+    security_group_ids = [module.vpc.default_security_group_id, aws_security_group.rds.id]
+  }
   memory_size = 256
   filename    = "ts_lambda_bundle.zip"
   handler     = "handlers/${each.value.handler}"
