@@ -7,7 +7,8 @@ export class PlaceOrderCommand implements ICommand<Promise<{ order_id: number, t
     constructor(private readonly repository: OrderRepository) {}
 
     async execute(customerId: number, quantity: number, time: string) {
-        const q = quantity || 1;
+        // Oh my god pick up the fucking quantity
+        const q = quantity !== undefined ? quantity : 1;
         console.log(customerId, q);
         if(this.validate(customerId, q, time))
             return await this.repository.placeOrderAndGetTotalCost(q, customerId, time);
