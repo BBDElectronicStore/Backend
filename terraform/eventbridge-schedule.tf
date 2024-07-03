@@ -14,9 +14,6 @@ locals {
   }
 
   now_and_then_lambda_targets = {
-    "pay-tax-lambda" = {
-      body = ""
-    },
     "handle-stocks-lambda" = {
       body = ""
     }
@@ -45,8 +42,8 @@ resource "aws_scheduler_schedule" "frequent-scheduler" {
   }
 }
 
-resource "aws_scheduler_schedule" "now-and-then-scheduler" {
-  name = "now-and-then-scheduler"
+resource "aws_scheduler_schedule" "stocks-scheduler" {
+  name = "stocks-scheduler"
 
   flexible_time_window {
     mode = "OFF"
@@ -54,17 +51,28 @@ resource "aws_scheduler_schedule" "now-and-then-scheduler" {
 
   schedule_expression = local.now_and_then_expression
 
-
-  dynamic "target" {
-    for_each = local.now_and_then_lambda_targets
-    content {
-      arn      = aws_lambda_function.lambda[target.key].arn
-      role_arn = aws_iam_role.scheduler_role.arn
-
-      input = target.value.body
-    }
-
+  target {
+    arn = aws_lambda_function.lambda["handle-stocks-lambda"].arn
+    role_arn = aws_iam_role.scheduler_role.arn
+    input = ""
   }
+}
+
+resource "aws_scheduler_schedule" "pay-tax-scheduler" {
+  name = "pay-tax-scheduler"
+
+  flexible_time_window {
+    mode = "OFF"
+  }
+
+  schedule_expression = local.now_and_then_expression
+
+  target {
+    arn = aws_lambda_function.lambda["pay-tax-lambda"].arn
+    role_arn = aws_iam_role.scheduler_role.arn
+    input = ""
+  }
+  
 }
 
 resource "aws_iam_role" "scheduler_role" {
