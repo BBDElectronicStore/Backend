@@ -29,6 +29,6 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
-  role       = aws_iam_role.terraform_function_role.arn
+  role       = aws_iam_role.terraform_function_role.name
   policy_arn = aws_iam_policy.lambda_logging.arn
 }
