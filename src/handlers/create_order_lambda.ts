@@ -18,6 +18,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         body: JSON.stringify({ message: 'Bad Request' }),
     }
     const data = JSON.parse(event.body);
+    console.log("incoming: ", data)
     const query = new GetSpecialQuery(new SpecialRepository());
     const value = await query.execute('startTime');
     const timeCalc = new Simulation(value);
