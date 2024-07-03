@@ -12,12 +12,6 @@ locals {
       body = ""
     }
   }
-
-  now_and_then_lambda_targets = {
-    "handle-stocks-lambda" = {
-      body = ""
-    }
-  }
 }
 
 
