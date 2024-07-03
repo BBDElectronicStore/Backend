@@ -1,6 +1,7 @@
 import {IRepository} from "./IRepository";
 import {DBPool} from "../database/database.pool";
 import {QueryResult} from "pg";
+import {Price} from "../interfaces/price";
 
 
 export class ProductRepository implements IRepository {
@@ -24,9 +25,9 @@ export class ProductRepository implements IRepository {
         }
     }
 
-    async getProductPriceAndVAT() {
+    async getProductPriceAndVAT(): Promise<Price | null> {
         try {
-            const result: QueryResult<any> = await DBPool.query(`
+            const result: QueryResult<Price> = await DBPool.query(`
               SELECT "price", "VAT"
               FROM "products"
               ORDER BY "product_id"

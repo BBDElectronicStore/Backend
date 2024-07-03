@@ -1,10 +1,10 @@
 import {Stock} from "../interfaces/stock";
 import {MyStock} from "../interfaces/myStock";
-import { makeSecureRequest } from "../helpers/mtls_request";
-import { RegisterStock } from "../interfaces/registerStock";
+import {makeSecureRequest} from "../helpers/mtls_request";
+import {RegisterStock} from "../interfaces/registerStock";
 
 export class StockService {
-    url = 'https://api.mese.projects.bbdgrad.com';
+    url = 'api.mese.projects.bbdgrad.com';
 
     async getStocks(): Promise<Stock[]> {
         try {
@@ -82,19 +82,19 @@ export class StockService {
                 name,
                 bankAccount
             }
-            const response = await fetch(`${this.url}/business`, { //TODO fix
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
+            console.log(payload)
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+            const response = await makeSecureRequest(
+                payload,
+                '/business',
+                'POST',
+                'api.mese.projects.bbdgrad.com'
+            );
+
+            if(response != undefined) {
+                return response.data;
             }
-            const data = await response.json();
-            return data;
+            return undefined;
         }
         catch (e) {
             console.log(e);

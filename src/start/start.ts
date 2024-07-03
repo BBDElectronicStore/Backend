@@ -8,8 +8,7 @@ import {SpecialValueCommand} from "../commands/specialValue.command";
 
 export async function start() {
     const stockService = new StockService();
-    let registrationResponse = await stockService.registerMyBusiness('Electronics', "electronics-retailer");
-
+    const registrationResponse = await stockService.registerMyBusiness('Electronics', "electronics-retailer");
     if(registrationResponse) {
         const command = new SpecialValueCommand(new SpecialRepository());
         await command.execute('StockId', registrationResponse.id);
