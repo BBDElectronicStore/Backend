@@ -25,16 +25,23 @@ export class ProductRepository implements IRepository {
         }
     }
 
-    async getProductPriceAndVAT(): Promise<Price | null> {
+    async getProductPriceAndVAT(): Promise<Price | null > {
         try {
-            const result: QueryResult<Price> = await DBPool.query(`
+            const result = await DBPool.query(`
               SELECT "price", "VAT"
               FROM "products"
               ORDER BY "product_id"
               LIMIT 1
             `);
-
-            return result.rows[0];
+            if(result.rows.length > 0) {
+                return {
+                    price: result.rows[0].price,
+                    vat: result.rows[0].VAT,
+                    total: (result.rows[0].price + (result.rows[0].price * result.rows[0].VAT / 100))
+                };
+            }
+            return null;
+            // return result.rows[0];
         } catch (error) {
             return null;
         }
