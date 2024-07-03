@@ -27,6 +27,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         await command.execute('startTime',startTime);
         await start();
         Logger.debug("start success");
+        await command.execute('zeusEnabled', 'true');
     }
     else {
         return {

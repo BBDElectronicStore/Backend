@@ -4,7 +4,7 @@ import {OrderRepository} from "../repositories/order.repository";
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const personaId = event.pathParameters?.personaId;
-
+  console.log(personaId)
   if (!personaId) {
     return {
       statusCode: 400,
