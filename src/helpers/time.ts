@@ -1,4 +1,4 @@
-export class TimeEvents { // interface
+export class TimeEvents {
     newMonth: boolean;
     newYear: boolean;
     date: string;
@@ -10,13 +10,13 @@ export class TimeEvents { // interface
     }
 }
 
-export class Simulation { // class
+export class Simulation {
     private simStart: Date;
     private currentDate: string;
     private isRunning: boolean;
 
     constructor(simStart: string) {
-        this.simStart = new Date();
+        this.simStart = simStart ? new Date(simStart) : new Date();
         this.currentDate = "01|01|01";
         this.isRunning = false;
     }
