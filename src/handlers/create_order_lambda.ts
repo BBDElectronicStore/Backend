@@ -13,10 +13,15 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
     const placeOrderCommand = new PlaceOrderCommand(new OrderRepository());
     if(event.body === null || event.body === undefined)
-    return {
-        statusCode: 400,
-        body: JSON.stringify({ message: 'Bad Request' }),
-    }
+        return {
+            statusCode: 400,
+            headers: {
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
+            body: JSON.stringify({ message: 'Bad Request' }),
+        }
     const data = JSON.parse(event.body);
     console.log("incoming: ", data)
     const query = new GetSpecialQuery(new SpecialRepository());
@@ -27,6 +32,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     if(result === null) {
         return {
             statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             body: JSON.stringify({message: 'Error placing order'}),
         }
     }
@@ -40,6 +50,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         await command.execute(String(result.order_id), 'denied');
         return {
               statusCode: 400,
+              headers: {
+                 "Access-Control-Allow-Headers": "*",
+                 "Access-Control-Allow-Origin": "*",
+                 "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+              },
               body: JSON.stringify({message: 'Payment declined'}),
         }
     }
@@ -50,6 +65,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     if(!insured) {
         return {
             statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             body: JSON.stringify({message: 'Error insuring order'}),
         }
     }
@@ -59,6 +79,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       statusCode: 200,
       body: JSON.stringify({
           message: 'Success',
+          headers: {
+              "Access-Control-Allow-Headers": "*",
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+          },
           orderRef: `electronics-${result.order_id}`,
       }),
     }
