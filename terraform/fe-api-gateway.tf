@@ -6,6 +6,7 @@ resource "aws_api_gateway_rest_api" "frontend-electronics-retailer-api" {
     get-price-lambda-arn : aws_lambda_function.lambda["get-price-lambda"].arn
     get-all-customers-lambda-arn : aws_lambda_function.lambda["get-all-customers-lambda"].arn
     get-all-orders-lambda-arn : aws_lambda_function.lambda["get-all-orders-lambda"].arn
+    get-customer-orders-arn : aws_lambda_function.lambda["get_customer_orders_lambda"].arn
     cognito_user_pool_arn : tolist(data.aws_cognito_user_pools.selected.arns)[0]
   })
   depends_on = [aws_lambda_function.lambda]

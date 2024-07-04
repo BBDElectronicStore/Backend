@@ -137,7 +137,7 @@ paths:
       security:
       - cognito: []
       x-amazon-apigateway-integration:
-        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-all-orders-lambda-arn}/invocations
+        uri: arn:aws:apigateway:${region}:lambda:path/2015-03-31/functions/${get-customer-orders-arn}/invocations
         passthroughBehavior: when_no_match
         httpMethod: POST
         type: aws_proxy
