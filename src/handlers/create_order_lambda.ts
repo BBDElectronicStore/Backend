@@ -77,13 +77,13 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     await command.execute(String(result.order_id), 'collected');
     return {
       statusCode: 200,
+        headers: {
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        },
       body: JSON.stringify({
           message: 'Success',
-          headers: {
-              "Access-Control-Allow-Headers": "*",
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
-          },
           orderRef: `electronics-${result.order_id}`,
       }),
     }
